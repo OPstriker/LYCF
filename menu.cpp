@@ -260,18 +260,19 @@ void style::render()
 	//ImGui::SetCursorPosY(70.0f);
 
 
+
 	ImGui::SetColumnOffset(1, 250);
 	{
 		//Left Side
 		//ImGui::SetScrollHereY(1.0);
-		static ImVec4 Active	= ImVec4(0.14f, 0.16f, 0.18f, 1.0f);
-		static ImVec4 InActive	= ImVec4(0.10f, 0.13f, 0.14f, 0.0f); //25, 33, 35, 255
+		static ImVec4 Active			= ImVec4(0.14f, 0.16f, 0.18f, 1.0f);
+		static ImVec4 InActive			= ImVec4(0.10f, 0.13f, 0.14f, 0.0f); //25, 33, 35, 255
 
 		static ImVec4 HoveredInActive	= ImVec4(0.14f, 0.16f, 0.18f, 1.0f);
 		static ImVec4 Hovered			= ImVec4(0.14f, 0.16f, 0.18f, 0.4f);
 
-		static ImVec4 Text			= ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
-		static ImVec4 TextInactive	= ImVec4(1.0f, 1.0f, 1.0f, 0.2f); // 0.33, 0.35, 0.36, 1.0
+		static ImVec4 Text				= ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+		static ImVec4 TextInactive		= ImVec4(1.0f, 1.0f, 1.0f, 0.2f); // 0.33, 0.35, 0.36, 1.0
 
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.14f, 0.16f, 0.18f, 0.35f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.14f, 0.16f, 0.18f, 0.35f));
@@ -280,11 +281,12 @@ void style::render()
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 8); // Rounding
 		ImGui::SetCursorPosY(10.0f);
 
+		auto ENABLE = 1; // Enable...
 
-		ImGui::PushStyleColor(ImGuiCol_Button, settings::tab == 1 ? Active : InActive);
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, settings::tab == 1 ? HoveredInActive : Hovered);
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, settings::tab == 1 ? Active : Hovered);
-		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == 1 ? Text : TextInactive);
+		ImGui::PushStyleColor(ImGuiCol_Button, settings::tab == ENABLE ? Active : InActive);
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, settings::tab == ENABLE ? HoveredInActive : Hovered);
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, settings::tab == ENABLE ? Active : Hovered);
+		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == ENABLE ? Text : TextInactive);
 		if (ImGui::Button("Enable", ImVec2(250 - 16.3, 60)))
 			settings::tab = 1;
 		if (ImGui::IsItemHovered()) {
@@ -292,14 +294,15 @@ void style::render()
 			if (settings::tab == 1)
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
 		}
-		ImGui::PopStyleColor(3);
+		//ImGui::PopStyleColor(3);
 
+		auto IBOSS = 2; // iBoss...
 
 		ImGui::Spacing();
-		ImGui::PushStyleColor(ImGuiCol_Button, settings::tab == 2 ? Active : InActive);
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, settings::tab == 2 ? HoveredInActive : Hovered);
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, settings::tab == 2 ? Active : Hovered);
-		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == 2 ? Text : TextInactive);
+		ImGui::PushStyleColor(ImGuiCol_Button, settings::tab == IBOSS ? Active : InActive);
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, settings::tab == IBOSS ? HoveredInActive : Hovered);
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, settings::tab == IBOSS ? Active : Hovered);
+		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == IBOSS ? Text : TextInactive);
 		if (ImGui::Button("iBoss", ImVec2(250 - 16.3, 60)))
 		{
 			settings::tab = 2;
@@ -310,14 +313,15 @@ void style::render()
 			if (settings::tab == 2)
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
 		}
-		ImGui::PopStyleColor(3);
+		//ImGui::PopStyleColor(3);
 
+		auto VPN = 3; // VPN...
 
 		ImGui::Spacing();
-		ImGui::PushStyleColor(ImGuiCol_Button, settings::tab == 3 ? Active : InActive);
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, settings::tab == 3 ? HoveredInActive : Hovered);
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, settings::tab == 3 ? Active : Hovered);
-		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == 3 ? Text : TextInactive);
+		ImGui::PushStyleColor(ImGuiCol_Button, settings::tab == VPN ? Active : InActive);
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, settings::tab == VPN ? HoveredInActive : Hovered);
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, settings::tab == VPN ? Active : Hovered);
+		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == VPN ? Text : TextInactive);
 		if (ImGui::Button("VPN", ImVec2(250 - 16.3, 60)))
 			settings::tab = 3;
 		if (ImGui::IsItemHovered()) {
@@ -325,13 +329,15 @@ void style::render()
 			if (settings::tab == 3)
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
 		}
-		ImGui::PopStyleColor(3);
+		//ImGui::PopStyleColor(3);
+
+		auto ABOUT = 4; // About...
 
 		ImGui::Spacing();
-		ImGui::PushStyleColor(ImGuiCol_Button, settings::tab == 4 ? Active : InActive);
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, settings::tab == 4 ? HoveredInActive : Hovered);
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, settings::tab == 4 ? Active : Hovered);
-		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == 4 ? Text : TextInactive);
+		ImGui::PushStyleColor(ImGuiCol_Button, settings::tab == ABOUT ? Active : InActive);
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, settings::tab == ABOUT ? HoveredInActive : Hovered);
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, settings::tab == ABOUT ? Active : Hovered);
+		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == ABOUT ? Text : TextInactive);
 		if (ImGui::Button("About", ImVec2(250 - 16.3, 60)))
 			settings::tab = 4;
 		if (ImGui::IsItemHovered()) {
@@ -340,13 +346,13 @@ void style::render()
 			if (settings::tab == 4)
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
 		}
-		ImGui::PopStyleColor(3);
+		//ImGui::PopStyleColor(3);
 
 
 		ImGui::SetCursorPos(ImVec2(42.5f, ImGui::GetWindowHeight() - 45.2));
 		ImGui::TextColored(ImVec4(0.83f, 0.66f, 0.69f, 1.0f), "Use At Your Own Risk"); // Let Your Computer Free!
 		// 0.86f, 0.08f, 0.24f, 1.0f
-		ImGui::PopStyleColor(6);
+		ImGui::PopStyleColor(18);
 
 
 		ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 10);
