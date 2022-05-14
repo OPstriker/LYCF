@@ -1,0 +1,8 @@
+Package: ovpn-dco-win
+Version: 0.2
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 55e2553b76053f670f01ae36634d20517642f9db331ce2905dbd82654a816c66
+Description: OpenVPN Data Channel Offload. Note: This package only contains the headers for the driver.
+Type: Port
+Status: install ok half-installed

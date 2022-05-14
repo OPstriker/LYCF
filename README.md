@@ -1,0 +1,21 @@
+# LYCF
+
+<b>Let Your Computer Free!</b>
+
+### Whats this?
+
+A Pretty Crappy and Modern Security App I Made to Aid Computers Back in School days... I must say that you won't find much use out of this Project. Unless you want to learn about the Implementation etc...
+
+### Uses?
+
+- VPN (OpenVPN)
+- Regedit Based Unlocker
+(Thats All for Now...)
+
+### Plans:
+
+- Buit-in Hotspot with VPN Share Support.
+- Better UI designs.
+- WireGuard Implemenation along with OpenVPN (Double Route).
+- A better update Framework other than NSIS (Inno Setup Installer).
+- Hopefully Get all of this to work out...
