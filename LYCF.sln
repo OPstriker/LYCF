@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LYCF", "LYCF.vcxproj", "{E9A2FE87-5AEB-46D8-AC90-70FADCBD7F97}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E9A2FE87-5AEB-46D8-AC90-70FADCBD7F97}.Debug|x64.ActiveCfg = Debug|x64
+		{E9A2FE87-5AEB-46D8-AC90-70FADCBD7F97}.Debug|x64.Build.0 = Debug|x64
+		{E9A2FE87-5AEB-46D8-AC90-70FADCBD7F97}.Debug|x86.ActiveCfg = Debug|Win32
+		{E9A2FE87-5AEB-46D8-AC90-70FADCBD7F97}.Debug|x86.Build.0 = Debug|Win32
+		{E9A2FE87-5AEB-46D8-AC90-70FADCBD7F97}.Release|x64.ActiveCfg = Release|x64
+		{E9A2FE87-5AEB-46D8-AC90-70FADCBD7F97}.Release|x64.Build.0 = Release|x64
+		{E9A2FE87-5AEB-46D8-AC90-70FADCBD7F97}.Release|x86.ActiveCfg = Release|Win32
+		{E9A2FE87-5AEB-46D8-AC90-70FADCBD7F97}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A9C12F5C-C2E4-4669-BC60-A91DA0CAAA36}
+	EndGlobalSection
+EndGlobal
