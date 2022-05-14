@@ -9,7 +9,7 @@ A Pretty Crappy and Modern Security App I Made to Aid Computers Back in School d
 ### Uses?
 
 - VPN (OpenVPN)
-- Regedit Based Unlocker
+- Regedit Based Unlocker/Locker
 (Thats All for Now...)
 
 ### Plans:
