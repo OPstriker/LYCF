@@ -281,7 +281,7 @@ void style::render()
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 8); // Rounding
 		ImGui::SetCursorPosY(10.0f);
 
-		auto ENABLE = 1; // Enable...
+		static auto ENABLE = 1; // Enable...
 
 		ImGui::PushStyleColor(ImGuiCol_Button, settings::tab == ENABLE ? Active : InActive);
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, settings::tab == ENABLE ? HoveredInActive : Hovered);
@@ -296,7 +296,7 @@ void style::render()
 		}
 		//ImGui::PopStyleColor(3);
 
-		auto IBOSS = 2; // iBoss...
+		static auto IBOSS = 2; // iBoss...
 
 		ImGui::Spacing();
 		ImGui::PushStyleColor(ImGuiCol_Button, settings::tab == IBOSS ? Active : InActive);
@@ -315,7 +315,7 @@ void style::render()
 		}
 		//ImGui::PopStyleColor(3);
 
-		auto VPN = 3; // VPN...
+		static auto VPN = 3; // VPN...
 
 		ImGui::Spacing();
 		ImGui::PushStyleColor(ImGuiCol_Button, settings::tab == VPN ? Active : InActive);
@@ -331,7 +331,7 @@ void style::render()
 		}
 		//ImGui::PopStyleColor(3);
 
-		auto ABOUT = 4; // About...
+		static auto ABOUT = 4; // About...
 
 		ImGui::Spacing();
 		ImGui::PushStyleColor(ImGuiCol_Button, settings::tab == ABOUT ? Active : InActive);
@@ -353,6 +353,7 @@ void style::render()
 		ImGui::TextColored(ImVec4(0.83f, 0.66f, 0.69f, 1.0f), "Use At Your Own Risk"); // Let Your Computer Free!
 		// 0.86f, 0.08f, 0.24f, 1.0f
 		ImGui::PopStyleColor(18);
+
 
 
 		ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 10);

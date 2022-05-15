@@ -399,7 +399,9 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
             HMENU ToolTipMenu = CreatePopupMenu();
 
-            AppendMenu(ToolTipMenu, MF_STRING, ID_DISPLAY_APP_LYCF, "Show LYCF");
+            BOOL wndState = IsWindowVisible(hWnd);
+
+            AppendMenu(ToolTipMenu, MF_STRING, ID_DISPLAY_APP_LYCF, wndState ? "Hide LYCF" : "Show LYCF");
             AppendMenu(ToolTipMenu, MF_SEPARATOR, 0, NULL);
             AppendMenu(ToolTipMenu, MF_STRING, ID_LYCF_CLOSE, "Exit");
 
@@ -412,10 +414,16 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
             if (id == ID_DISPLAY_APP_LYCF)
             {
-                ShowWindow(hWnd, SW_RESTORE);
-                SetActiveWindow(hWnd);
-                SetForegroundWindow(hWnd);
-
+                if (wndState)
+                {
+                    ShowWindow(hWnd, SW_HIDE);
+                }
+                else 
+                {
+                    ShowWindow(hWnd, SW_RESTORE);
+                    SetActiveWindow(hWnd);
+                    SetForegroundWindow(hWnd);
+                }
             }
             else if (id == ID_LYCF_CLOSE) {
                 NotifyCon = false;
@@ -424,7 +432,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             }
             else 
             {
-                // Lets just Ingore this...
+                NULL; // Lets just Ingore this...
             }
             break;
         }
