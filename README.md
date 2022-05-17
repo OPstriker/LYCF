@@ -4,7 +4,7 @@
 
 ### Whats this?
 
-A Pretty Crappy and Modern Security App I Made to Aid Computers Back in School days... I must say that you won't find much use out of this Project. Unless you want to learn about the Implementation etc...
+A Pretty Crappy and Modern Security App I Made to Aid MS-Windows Back in School days... I must say that you won't find much use out of this Project. Unless you want to learn about the Implementation etc...
 
 ### Uses?
 
