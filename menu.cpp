@@ -487,7 +487,7 @@ void style::render()
 			{
 				//LYCF::Display::Prompt();
 				//Prompt = true;
-
+				if(MessageBox(NULL, ""))
 				LYCF::iBoss_LYCF::iBossBlockDialog = true;
 				//LYCF::Display::Prompt = true;
 			}
@@ -502,7 +502,7 @@ void style::render()
 			ImGui::Spacing();
 			ImGui::BeginChild("iBoss Login", ImVec2(ImGui::GetWindowWidth() - 285.0f, 60.0f));
 			ImGui::SetCursorPos(ImVec2(10.0f, 20.0f));
-			ImGui::Text("Connectivity Check");
+			ImGui::Text("iBoss Login (BYOD)");
 			ImGui::SameLine();
 
 			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 120, 13.0f));
@@ -514,7 +514,7 @@ void style::render()
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6.0f);
 			if (ImGui::Button("Launch", ImVec2(110.0f, 35.0f)))
 			{
-				if (ShellExecute(0, 0, "https://connectivitycheck.gstatic.com/", 0, 0, SW_HIDE))
+				if (ShellExecute(0, 0, "http://connectivitycheck.gstatic.com/", 0, 0, SW_HIDE))
 				{
 					LYCF::iBoss_LYCF::iBossLoginpg = true;
 				}

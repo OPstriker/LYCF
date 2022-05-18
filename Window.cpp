@@ -245,7 +245,7 @@ void SetForGroundWindow_Main()
 }
 
 // For NotifyIcon in StatusBar
-#define WM_MYMESSAGE (WM_USER + 1)
+#define WM_LYCF (WM_USER + 1)
 bool NotifyCon = true;
 #define ID_DISPLAY_APP_LYCF 103
 #define ID_LYCF_CLOSE 104
@@ -261,7 +261,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     nid.hWnd = hWnd;
     nid.uID = 100;
     nid.uVersion = NOTIFYICON_VERSION;
-    nid.uCallbackMessage = WM_MYMESSAGE;
+    nid.uCallbackMessage = WM_LYCF;
     nid.hIcon = LoadIcon(NULL, IDI_APPLICATION);
     strcpy_s(nid.szTip, "LYCF");
     nid.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP;
@@ -305,35 +305,34 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     }
     case WM_CLOSE:
-        NotifyCon = false;
-        Shell_NotifyIcon(NIM_DELETE, &nid);
-        DestroyWindow(g_hwnd);
+        ShowWindow(hWnd, SW_HIDE);
         return 0;
         break;
     case WM_DESTROY:
         NotifyCon = false;
         Shell_NotifyIcon(NIM_DELETE, &nid);
         PostQuitMessage(0);
-        break;
+        ShowWindow(hWnd, SW_HIDE);
         return 0;
+        break;
     case WM_NCCALCSIZE: {
-        if (!wParam) return DefWindowProc(hWnd, msg, wParam, lParam);
-        UINT dpi = GetDpiForWindow(hWnd);
-
-
-        int frame_x = GetSystemMetricsForDpi(SM_CXFRAME, dpi);
-        int frame_y = GetSystemMetricsForDpi(SM_CYFRAME, dpi);
-        int padding = GetSystemMetricsForDpi(SM_CXPADDEDBORDER, dpi);
-
-        NCCALCSIZE_PARAMS* params = (NCCALCSIZE_PARAMS*)lParam;
-        RECT* requested_client_rect = params->rgrc;
-
-        requested_client_rect->right -= frame_x + padding;
-        requested_client_rect->left += frame_x + padding;
-        requested_client_rect->bottom -= frame_y + padding;
-
-        return 0;
-        break;
+       if (!wParam) return DefWindowProc(hWnd, msg, wParam, lParam);
+       UINT dpi = GetDpiForWindow(hWnd);
+       
+       
+       int frame_x = GetSystemMetricsForDpi(SM_CXFRAME, dpi);
+       int frame_y = GetSystemMetricsForDpi(SM_CYFRAME, dpi);
+       int padding = GetSystemMetricsForDpi(SM_CXPADDEDBORDER, dpi);
+       
+       NCCALCSIZE_PARAMS* params = (NCCALCSIZE_PARAMS*)lParam;
+       RECT* requested_client_rect = params->rgrc;
+       
+       requested_client_rect->right -= frame_x + padding;
+       requested_client_rect->left += frame_x + padding;
+       requested_client_rect->bottom -= frame_y + padding;
+       
+       return 0;
+       break;
     }
     case WM_NCHITTEST: {
         // Let the default procedure handle resizing areas
@@ -384,7 +383,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
         return HTCLIENT;
     }
-    case WM_MYMESSAGE: {
+    case WM_LYCF: {
         switch (lParam)
         {
         case WM_LBUTTONUP: {
@@ -428,7 +427,8 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             else if (id == ID_LYCF_CLOSE) {
                 NotifyCon = false;
                 Shell_NotifyIcon(NIM_DELETE, &nid);
-                PostMessage(hWnd, WM_CLOSE, 0, 0);
+                //PostMessage(hWnd, WM_CLOSE, 0, 0);
+                DestroyWindow(hWnd);
             }
             else 
             {
