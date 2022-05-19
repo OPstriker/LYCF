@@ -148,6 +148,19 @@ void LoadingIndicatorCircle(const char* label, const float indicator_radius,
 	}
 }
 
+// Load 
+
+bool LYCF::Display::LoadIcons = true;
+
+
+GLuint LYCF::Display::minz;
+GLuint LYCF::Display::close;
+
+static int close_width = 0;
+static int close_height = 0;
+
+static int minz_width = 0;
+static int minz_height = 0;
 
 // Block Dialog
 void LYCF::Display::Prompt(const char* Text, bool* close)
@@ -157,13 +170,8 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 
 	ImGui::SetCursorPos(ImVec2(550.0f, 350.0f));
 
-	static bool popup1;
-
-	if (popup1)
-	{
+	if (LYCF::iBoss_LYCF::iBossBlockDialog)
 		ImGui::OpenPopup("Prompt");
-		popup1 = false;
-	}
 	
 
 	bool open = true;
@@ -172,58 +180,47 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 	ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
 	if (ImGui::BeginPopupModal("Prompt", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{
-		int my_image_width = 0;
-		int my_image_height = 0;
-		GLuint my_image_texture = 0;
-		bool ret = LoadTextureFromFile("icons//close.png", &my_image_texture, &my_image_width, &my_image_height);
-		IM_ASSERT(ret);
+		// Lets Get Em ANimations... Progress Stuff....
+		
+		ImGui::SetCursorPos(ImVec2((420.0f / 2) - 50.0f, (250.0f / 2) - 70.0f));
+		LoadingIndicatorCircle("Circle", 50.0f, ImVec4(0.85f, 0.85f, 0.85f, 0.8f), ImVec4(0.85f, 0.85f, 0.85f, 1.0f), 8, 5.24f);
 
+		ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 6);
 
-		//ImGui::Image((void*)(intptr_t)my_image_texture, ImVec2(my_image_width, my_image_height));
+		ImGui::SetCursorPos(ImVec2((420.0f / 2) - 130, ImGui::GetCursorPosY() + 27));
+		ImGui::BeginChild("ibs_prg_stat", ImVec2(260.0f, 45.0f), true);
+		
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 3);
 
-		ImGui::Text(Text);
-		static bool loading = true;
+		ImGui::Text("Status: ");
 
-		if (loading)
-		{
-			LoadingIndicatorCircle("Circle", 50.0f, ImVec4(0.85f, 0.85f, 0.85f, 0.8f), ImVec4(0.85f, 0.85f, 0.85f, 1.0f), 8, 5.24f);
-		}
-
-
-		//ImGui::ProgressBar(ImGui::GetTime() * -0.25f);
-		//BufferingBar("Blocking", );
-
-		//static ImU32 spin_colEN = ImGui::GetColorU32(ImVec4(0.85f, 0.85f, 0.85f, 0.8f));
-		//Spinner("spin", 10.0f, 10.0f, spin_colEN);
-		//ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 100);
-
-		//Spinner("lbl", 10, 5, spin_colEN);
-
+		ImGui::EndChild();
 
 
 		ImGui::SetCursorPos(ImVec2(90.0f, 170.0f));
 		
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.20, 0.35, 0.35, 1.0));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.20, 0.35, 0.35, 0.6));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.20, 0.35, 0.35, 0.6));
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.20, 0.35, 0.35, 0.0));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.20, 0.35, 0.35, 1.0));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.20, 0.35, 0.35, 0.0));
 
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
 
-		if (ImGui::Button("Close", ImVec2(120.0f, 50.0f)))
+		
+		ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 35.5, 8.5f));
+		if (ImGui::Button(" ", ImVec2(26.5f, 25.0f)))
 		{
-
-			//loading = false;
-			//*close = false;
+			*close = false;
+			LYCF::iBoss_LYCF::iBossBlockDialog = false;
 			ImGui::CloseCurrentPopup();
 		}
 
-		//ImGui::EndPopup();
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.20, 0.35, 0.35, 0.0));
 
-		if (ImGui::IsItemHovered())
-			ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+		ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 35.5, 8.5f));
+		ImGui::ImageButton((void*)(intptr_t)LYCF::Display::close, ImVec2(19.5f, 20.0f));
 
-		ImGui::PopStyleColor(3);
-		ImGui::PopStyleVar();
+		ImGui::PopStyleColor(4);
+		ImGui::PopStyleVar(2);
 
 		ImGui::EndPopup();
 	}
@@ -263,17 +260,17 @@ void style::theme_2()
 }
 
 // close
-bool LYCF::Display::LoadIcons = true;
-
-
-GLuint LYCF::Display::minz;
-GLuint LYCF::Display::close;
-
-static int close_width = 0;
-static int close_height = 0;
-
-static int minz_width = 0;
-static int minz_height = 0;
+//bool LYCF::Display::LoadIcons = true;
+//
+//
+//GLuint LYCF::Display::minz;
+//GLuint LYCF::Display::close;
+//
+//static int close_width = 0;
+//static int close_height = 0;
+//
+//static int minz_width = 0;
+//static int minz_height = 0;
 
 
 void LYCF::Display::caption()
@@ -478,14 +475,15 @@ void style::render()
 		if (settings::tab == 1) // Enable
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 6);
+			ImGui::PushStyleColor(ImGuiCol_Border, LYCF::EN_LYCF::check_settings ? ImVec4(0.31f, 0.78f, 0.47f, 0.5f) : ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
 			ImGui::SetCursorPosY(50.0f);
 
 
 			// Settings Option
 
-			ImGui::BeginChild("Settings", ImVec2(ImGui::GetWindowWidth() - 285, 60), false);
+			ImGui::BeginChild("Settings", ImVec2(ImGui::GetWindowWidth() - 285, 60), true);
 			ImGui::SetCursorPos(ImVec2(20, 20));
-			ImGui::Text("Settings");
+			ImGui::Text("Settings & Control Panel");
 			ImGui::SameLine();
 			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 66.0, 15.0));
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
@@ -495,16 +493,18 @@ void style::render()
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 			ImGui::PopStyleVar();
 			ImGui::EndChild();
+			ImGui::PopStyleColor();
 			
 			// Set Setting Reg
 			LYCF::EN_LYCF::SetDword_SettingReg_CheckBased(LYCF::EN_LYCF::check_settings);
 			
 
 			// CMD Option
-
+			
+			ImGui::PushStyleColor(ImGuiCol_Border, LYCF::EN_LYCF::check_cmd ? ImVec4(0.31f, 0.78f, 0.47f, 0.5f) : ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
 
 			ImGui::Spacing();
-			ImGui::BeginChild("CMD", ImVec2(ImGui::GetWindowWidth() - 285, 60), false);
+			ImGui::BeginChild("CMD", ImVec2(ImGui::GetWindowWidth() - 285, 60), true);
 			ImGui::SetCursorPos(ImVec2(20, 20));
 			ImGui::Text("CMD");
 			ImGui::SameLine();
@@ -516,6 +516,7 @@ void style::render()
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 			ImGui::PopStyleVar();
 			ImGui::EndChild();
+			ImGui::PopStyleColor();
 
 			// Set CMD reg
 
@@ -523,8 +524,10 @@ void style::render()
 
 			// TaskManager Option
 
+			ImGui::PushStyleColor(ImGuiCol_Border, LYCF::EN_LYCF::check_TManager ? ImVec4(0.31f, 0.78f, 0.47f, 0.5f) : ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
+
 			ImGui::Spacing();
-			ImGui::BeginChild("TaskManager", ImVec2(ImGui::GetWindowWidth() - 285, 60), false);
+			ImGui::BeginChild("TaskManager", ImVec2(ImGui::GetWindowWidth() - 285, 60), true);
 			ImGui::SetCursorPos(ImVec2(20, 20));
 			ImGui::Text("TaskManager");
 			ImGui::SameLine();
@@ -536,11 +539,13 @@ void style::render()
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 			ImGui::PopStyleVar();
 			ImGui::EndChild();
+			ImGui::PopStyleColor();
 
 			// Set TaskManager reg
 			LYCF::EN_LYCF::SetDword_TManagerReg_CheckBased(LYCF::EN_LYCF::check_TManager);
 			
 			ImGui::PopStyleVar();
+			//ImGui::PopStyleColor();
 			
 			//ImGui::ImageButton(path, ImVec2(20.0f, 20.0f));
 		}
@@ -555,17 +560,19 @@ void style::render()
 
 			if (LYCF::iBoss_LYCF::iBossBlockDialog)
 				LYCF::Display::Prompt("Hellow WOrld", &LYCF::iBoss_LYCF::iBossBlockDialog);
-
+			
 			if (LYCF::iBoss_LYCF::iBossLoginpg)
 				LYCF::Display::Prompt("If you Get an Error Please Try again later..", &LYCF::iBoss_LYCF::iBossLoginpg);
 
 
 			const char* value = LYCF::iBoss_LYCF::ibs_stat ? "Active (Running)" : "Dead (Not Running)";
 
+			//ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
+
 			ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 9);
 			// iBoss Status Indicator...
 			ImGui::SetCursorPos(ImVec2(360.0f, -7.0f));
-			ImGui::BeginChild("iBoss", ImVec2(295.0f, 50.0f), false);
+			ImGui::BeginChild("iBoss", ImVec2(295.0f, 50.0f), true);
 			ImGui::SetCursorPos(ImVec2(21.5f, 17.0f));
 			ImGui::Text("iBoss Status:");
 			ImGui::SameLine();
@@ -574,17 +581,22 @@ void style::render()
 
 
 			// iBoss Options...
+			ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
 			ImGui::SetCursorPosY(90.0f);
-			ImGui::BeginChild("iBoss-Block", ImVec2(ImGui::GetWindowWidth() - 285, 60)); // iBoss-Block start...
+			ImGui::BeginChild("iBoss-Block", ImVec2(ImGui::GetWindowWidth() - 285, 60), true); // iBoss-Block start...
 			ImGui::SetCursorPos(ImVec2(10.0f, 20.0f));
 			ImGui::Text("iBoss");
 			ImGui::SameLine();
 			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 160, 13.0f));
+			ImGui::PopStyleColor();
+
 
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.14f, 0.16f, 0.18f, 1.0f));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.14f, 0.16f, 0.18f, 0.5f));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.14f, 0.16f, 0.18f, 0.5f));
+			ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
 
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.1f);
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6.0f);
 			if (ImGui::Button(LYCF::iBoss_LYCF::ibs_stat ? "Block iBoss" : "Enable iBoss", ImVec2(150.0f, 35.0f)))
 			{
@@ -595,14 +607,14 @@ void style::render()
 			}
 			if (ImGui::IsItemHovered())
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
-			ImGui::PopStyleVar();
-			ImGui::PopStyleColor(3);
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(4);
 			ImGui::EndChild(); //iBoss - Block End...
 
 			// iBoss Login
 
 			ImGui::Spacing();
-			ImGui::BeginChild("iBoss Login", ImVec2(ImGui::GetWindowWidth() - 285.0f, 60.0f));
+			ImGui::BeginChild("iBoss Login", ImVec2(ImGui::GetWindowWidth() - 285.0f, 60.0f), false);
 			ImGui::SetCursorPos(ImVec2(10.0f, 20.0f));
 			ImGui::Text("iBoss Login (BYOD)");
 			ImGui::SameLine();
@@ -612,8 +624,10 @@ void style::render()
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.14f, 0.16f, 0.18f, 1.0f));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.14f, 0.16f, 0.18f, 0.5f));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.14f, 0.16f, 0.18f, 0.5f));
+			ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
 
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6.0f);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.01f);
 			if (ImGui::Button("Launch", ImVec2(110.0f, 35.0f)))
 			{
 				if (ShellExecute(0, 0, "http://connectivitycheck.gstatic.com/", 0, 0, SW_HIDE))
@@ -625,15 +639,16 @@ void style::render()
 			if (ImGui::IsItemHovered())
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
-			ImGui::PopStyleVar();
-			ImGui::PopStyleColor(3);
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(4);
 
 			ImGui::EndChild();
 
 
 			// iBoss Persist
 			ImGui::Spacing();
-			ImGui::BeginChild("iBoss-Persist)", ImVec2(ImGui::GetWindowWidth() - 285.0f, 60.0f)); // iBoss - Persis Begin...
+			ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
+			ImGui::BeginChild("iBoss-Persist)", ImVec2(ImGui::GetWindowWidth() - 285.0f, 60.0f), true); // iBoss - Persis Begin...
 			ImGui::SetCursorPos(ImVec2(10.0f, 20.0f));
 			ImGui::Text("Persistent Block (optional)");
 			ImGui::SameLine();
@@ -650,7 +665,7 @@ void style::render()
 
 			// iBoss Note
 			ImGui::SetCursorPos(ImVec2(ImGui::GetColumnOffset() + 50, ImGui::GetWindowHeight() - 60));
-			ImGui::BeginChild("iBoss-Note", ImVec2(480.0f, 40.0f), false); // Start iBoss Note
+			ImGui::BeginChild("iBoss-Note", ImVec2(480.0f, 40.0f), true); // Start iBoss Note
 			ImGui::SetCursorPos(ImVec2(20.0f, 10.0f));
 			ImGui::Text("Note: iBoss Must be Disabled for the VPN to Work Properly");
 
@@ -660,7 +675,7 @@ void style::render()
 
 
 			ImGui::PopStyleVar();
-
+			ImGui::PopStyleColor();
 		}
 
 		//static bool vpnstat = false;
