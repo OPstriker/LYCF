@@ -231,11 +231,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     ImGui::DestroyContext();
 
     UnregisterClass("LYCF", hInstance);
-    DestroyWindow(g_hwnd);
+    //DestroyWindow(g_hwnd);
     UnregisterClass(_T("LYCF"), wc.hInstance);
     
     //glad_polle
-    DestroyWindow(g_hwnd);
+    //DestroyWindow(g_hwnd);
+    PostMessage(g_hwnd, WM_DESTROY, 0, 0);
     return 0;
 }
 
@@ -311,8 +312,9 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
         NotifyCon = false;
         Shell_NotifyIcon(NIM_DELETE, &nid);
-        PostQuitMessage(0);
-        ShowWindow(hWnd, SW_HIDE);
+        //PostQuitMessage(0);
+        if (PostMessage(hWnd, WM_QUIT, 0, 0))
+            DestroyWindow(hWnd);
         return 0;
         break;
     case WM_NCCALCSIZE: {
@@ -427,8 +429,8 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             else if (id == ID_LYCF_CLOSE) {
                 NotifyCon = false;
                 Shell_NotifyIcon(NIM_DELETE, &nid);
-                //PostMessage(hWnd, WM_CLOSE, 0, 0);
-                DestroyWindow(hWnd);
+                PostMessage(hWnd, WM_QUIT, 0, 0);
+                PostMessage(hWnd, WM_DESTROY, 0, 0);
             }
             else 
             {
@@ -449,7 +451,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 ShowWindow(g_hwnd, SW_HIDE);
             }
             else {
-                DestroyWindow(g_hwnd);
+                PostMessage(hWnd, WM_DESTROY, 0, 0);
             }
         }
         break;
@@ -460,7 +462,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
         return DefWindowProc(hWnd, msg, wParam, lParam);
 
-        DestroyWindow(hWnd);
+        PostMessage(hWnd, WM_DESTROY, 0, 0);
 
         return 0;
 }

@@ -66,6 +66,88 @@ bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_wid
 	return true;
 }
 
+bool Spinner(const char* label, float radius, int thickness, const ImU32& color) {
+	using namespace ImGui;
+	ImGuiWindow* window = GetCurrentWindow();
+	if (window->SkipItems)
+		return false;
+
+	ImGuiContext& g = *GImGui;
+	const ImGuiStyle& style = g.Style;
+	const ImGuiID id = window->GetID(label);
+
+	ImVec2 pos = window->DC.CursorPos;
+	ImVec2 size((radius) * 2, (radius + style.FramePadding.y) * 2);
+
+	const ImRect bb(pos, ImVec2(pos.x + size.x, pos.y + size.y));
+	ItemSize(bb, style.FramePadding.y);
+	if (!ItemAdd(bb, id))
+		return false;
+
+	// Render
+	window->DrawList->PathClear();
+
+	int num_segments = 30;
+	int start = abs(ImSin(g.Time * 1.8f) * (num_segments - 5));
+
+	const float a_min = IM_PI * 2.0f * ((float)start) / (float)num_segments;
+	const float a_max = IM_PI * 2.0f * ((float)num_segments - 3) / (float)num_segments;
+
+	const ImVec2 centre = ImVec2(pos.x + radius, pos.y + radius + style.FramePadding.y);
+
+	for (int i = 0; i < num_segments; i++) {
+		const float a = a_min + ((float)i / (float)num_segments) * (a_max - a_min);
+		window->DrawList->PathLineTo(ImVec2(centre.x + ImCos(a + g.Time * 8) * radius,
+			centre.y + ImSin(a + g.Time * 8) * radius));
+	}
+
+	window->DrawList->PathStroke(color, false, thickness);
+	return false;
+}
+
+void LoadingIndicatorCircle(const char* label, const float indicator_radius,
+	const ImVec4& main_color, const ImVec4& backdrop_color,
+	const int circle_count, const float speed) {
+	using namespace ImGui;
+	ImGuiStyle &style = ImGui::GetStyle();
+	ImGuiWindow* window = GetCurrentWindow();
+	if (window->SkipItems) {
+		return;
+	}
+
+	ImGuiContext& g = *GImGui;
+	const ImGuiID id = window->GetID(label);
+
+	const ImVec2 pos = window->DC.CursorPos;
+	const float circle_radius = indicator_radius / 10.0f;
+	const ImRect bb(pos, ImVec2(pos.x + indicator_radius * 2.0f,
+		pos.y + indicator_radius * 2.0f));
+	ItemSize(bb, style.FramePadding.y);
+	if (!ItemAdd(bb, id)) {
+		return;
+	}
+	const float t = g.Time;
+	const auto degree_offset = 2.0f * IM_PI / circle_count;
+	for (int i = 0; i < circle_count; ++i) {
+		const auto x = indicator_radius * std::sin(degree_offset * i);
+		const auto y = indicator_radius * std::cos(degree_offset * i);
+
+		auto val1 = 0;
+		auto val2 = std::sin(t * speed - i * degree_offset);
+
+		const auto growth = max(val1, val2);
+		ImVec4 color;
+		color.x = main_color.x * growth + backdrop_color.x * (1.0f - growth);
+		color.y = main_color.y * growth + backdrop_color.y * (1.0f - growth);
+		color.z = main_color.z * growth + backdrop_color.z * (1.0f - growth);
+		color.w = 1.0f;
+		window->DrawList->AddCircleFilled(ImVec2(pos.x + indicator_radius + x,
+			pos.y + indicator_radius - y),
+			circle_radius + growth * circle_radius,
+			GetColorU32(color));
+	}
+}
+
 
 // Block Dialog
 void LYCF::Display::Prompt(const char* Text, bool* close)
@@ -74,14 +156,21 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 	ImGui::SetCursorPos(ImVec2(550.0f, 350.0f));
-	//if (ImGui::Button("Modal"))
+
+	static bool popup1;
+
+	if (popup1)
+	{
 		ImGui::OpenPopup("Prompt");
+		popup1 = false;
+	}
+	
 
 	bool open = true;
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 16);
 	ImGui::SetNextWindowSize(ImVec2(420.0f, 250.0f));
 	ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
-	if (ImGui::BeginPopupModal("Prompt", &open, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+	if (ImGui::BeginPopupModal("Prompt", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{
 		int my_image_width = 0;
 		int my_image_height = 0;
@@ -93,9 +182,19 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 		//ImGui::Image((void*)(intptr_t)my_image_texture, ImVec2(my_image_width, my_image_height));
 
 		ImGui::Text(Text);
+		static bool loading = true;
+
+		if (loading)
+		{
+			LoadingIndicatorCircle("Circle", 50.0f, ImVec4(0.85f, 0.85f, 0.85f, 0.8f), ImVec4(0.85f, 0.85f, 0.85f, 1.0f), 8, 5.24f);
+		}
 
 
-		static ImU32 spin_colEN = ImGui::GetColorU32(ImVec4(0.85f, 0.85f, 0.85f, 0.8f));
+		//ImGui::ProgressBar(ImGui::GetTime() * -0.25f);
+		//BufferingBar("Blocking", );
+
+		//static ImU32 spin_colEN = ImGui::GetColorU32(ImVec4(0.85f, 0.85f, 0.85f, 0.8f));
+		//Spinner("spin", 10.0f, 10.0f, spin_colEN);
 		//ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 100);
 
 		//Spinner("lbl", 10, 5, spin_colEN);
@@ -112,9 +211,13 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 
 		if (ImGui::Button("Close", ImVec2(120.0f, 50.0f)))
 		{
+
+			//loading = false;
+			//*close = false;
 			ImGui::CloseCurrentPopup();
-			*close = false;
 		}
+
+		//ImGui::EndPopup();
 
 		if (ImGui::IsItemHovered())
 			ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
@@ -487,7 +590,6 @@ void style::render()
 			{
 				//LYCF::Display::Prompt();
 				//Prompt = true;
-				if(MessageBox(NULL, ""))
 				LYCF::iBoss_LYCF::iBossBlockDialog = true;
 				//LYCF::Display::Prompt = true;
 			}
@@ -629,6 +731,23 @@ void style::render()
 
 			ImGui::SetCursorPos(ImVec2(250.0f, 250.0f));
 			ImGui::Text("About");
+
+			static bool idk;
+
+
+
+			ImGui::Checkbox(" ", &idk);
+
+			ImGui::SetCursorPosX(ImGui::GetColumnOffset() + 50.0f);
+			if (idk) {
+				LoadingIndicatorCircle("Circle", 50.0f, ImVec4(0.85f, 0.85f, 0.85f, 0.2f), ImVec4(0.85f, 0.55f, 0.95f, 0.0f), 8, 10.24f);
+
+				static ImU32 spin_colEN = ImGui::GetColorU32(ImVec4(0.85f, 0.85f, 0.85f, 0.8f));
+
+				ImGui::SetCursorPosX(ImGui::GetColumnOffset() + 100.0f);
+				Spinner("heh", 22.0f, 10, spin_colEN);
+			}
+
 
 			ImGui::EndChild();
 
