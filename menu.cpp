@@ -1,4 +1,6 @@
-﻿#include "style.h"
+﻿#define IMGUI_DEFINE_MATH_OPERATORS
+
+#include "style.h"
 #include <imgui/imgui.h>
 #include <imgui/imguipp.h>
 #include <imgui/imgui_internal.h>
@@ -64,6 +66,59 @@ bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_wid
 	*out_height = image_height;
 
 	return true;
+}
+
+void cs_ProgressBar(float fraction, const ImVec2& size_arg, const char* overlay, ImVec4 col)
+{
+	using namespace ImGui;
+	ImGuiWindow* window = GetCurrentWindow();
+	if (window->SkipItems)
+		return;
+
+	ImGuiContext& g = *GImGui;
+	const ImGuiStyle& style = g.Style;
+
+	ImVec2 pos = window->DC.CursorPos;
+	ImVec2 sizeval	= CalcItemSize(size_arg, CalcItemWidth(), g.FontSize + style.FramePadding.y * 2.0f);
+	ImRect bb(pos, pos + sizeval);
+	ItemSize(sizeval, style.FramePadding.y);
+	if (!ItemAdd(bb, 0))
+		return;
+
+	float bar_begin = 0.0f;
+	float bar_end = ImSaturate(fraction);
+
+	const bool indeterminate = fraction < 0.0f;
+	if (indeterminate)
+	{
+		const float bar_fraction = 0.2f;
+		bar_begin = ImFmod(-fraction, 1.0f) * (1.0f + bar_fraction) - bar_fraction;
+		bar_end = bar_begin + bar_fraction;
+	}
+
+	// Render
+	RenderFrame(bb.Min, bb.Max, GetColorU32(ImGuiCol_FrameBg), true, style.FrameRounding);
+	bb.Expand(ImVec2(-style.FrameBorderSize, -style.FrameBorderSize));
+	RenderRectFilledRangeH(window->DrawList, bb, GetColorU32(col), bar_begin, bar_end, style.FrameRounding); // GetColorU32(ImGuiCol_PlotHistogram)
+
+	// Don't display text for indeterminate bars by default
+	if (!indeterminate || overlay)
+	{
+		// Default displaying the fraction as percentage string, but user can override it
+		char overlay_buf[32];
+		if (!overlay)
+		{
+			ImFormatString(overlay_buf, IM_ARRAYSIZE(overlay_buf), "%.0f%%", fraction * 100 + 0.01f);
+			overlay = overlay_buf;
+		}
+
+		const ImVec2 overlay_size = CalcTextSize(overlay, NULL);
+		if (overlay_size.x > 0.0f)
+		{
+			const ImVec2 fill_br = ImVec2(indeterminate ? (bb.Min.x + bb.Max.x - overlay_size.x) * 0.5f : ImLerp(bb.Min.x, bb.Max.x, bar_end), bb.Max.y);
+			RenderTextClipped(ImVec2(ImClamp(fill_br.x + style.ItemSpacing.x, bb.Min.x, bb.Max.x - overlay_size.x - style.ItemInnerSpacing.x), bb.Min.y), bb.Max, overlay, NULL, &overlay_size, ImVec2(0.0f, 0.5f), &bb);
+		}
+	}
 }
 
 bool Spinner(const char* label, float radius, int thickness, const ImU32& color) {
@@ -173,6 +228,7 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 	if (LYCF::iBoss_LYCF::iBossBlockDialog)
 		ImGui::OpenPopup("Prompt");
 	
+	static ImU32 spincol_1 = ImGui::GetColorU32(ImVec4(0.85f, 0.85f, 0.85f, 0.8f));
 
 	bool open = true;
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 16);
@@ -188,14 +244,30 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 		ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 6);
 
 		ImGui::SetCursorPos(ImVec2((420.0f / 2) - 130, ImGui::GetCursorPosY() + 27));
-		ImGui::BeginChild("ibs_prg_stat", ImVec2(260.0f, 45.0f), true);
-		
-		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 3);
+		//ImGui::BeginChild("ibs_prg_stat", ImVec2(260.0f, 45.0f), true);
+		//
+		//ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 3);
+		//
+		////ImGui::TextEx("Blocking iBoss...");
+		//ImGui::TextColored(ImVec4(0.31f, 0.78f, 0.47f, 1.0f), "Blocking iBoss");
+		//ImGui::SameLine();
+		//
+		//ImGui::SetCursorPosY((45.0f / 2) - 7.5f);
+		//Spinner("spino", 5.0f, 2.0f, spincol_1);
+		//
+		//ImGui::EndChild();
 
-		ImGui::Text("Status: ");
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.01f);
 
-		ImGui::EndChild();
+		//ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 50);
 
+		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(1.0f, 1.0f, 1.0f, 0.0f));
+
+		cs_ProgressBar(ImGui::GetTime() * - 0.50f, ImVec2(260.0f, 45.0f), "Blocking iBoss...", ImVec4(0.31f, 0.78f, 0.47f, 1.0f));
+
+		ImGui::PopStyleVar(2);
+		ImGui::PopStyleColor();
 
 		ImGui::SetCursorPos(ImVec2(90.0f, 170.0f));
 		
@@ -205,19 +277,24 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
 
+		static bool show = false;
 		
-		ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 35.5, 8.5f));
-		if (ImGui::Button(" ", ImVec2(26.5f, 25.0f)))
+		if (show)
 		{
-			*close = false;
-			LYCF::iBoss_LYCF::iBossBlockDialog = false;
-			ImGui::CloseCurrentPopup();
+			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 35.5, 8.5f));
+			if (ImGui::Button(" ", ImVec2(26.5f, 25.0f)))
+			{
+				*close = false;
+				LYCF::iBoss_LYCF::iBossBlockDialog = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.20, 0.35, 0.35, 0.0));
+
+			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 35.5, 8.5f));
+			ImGui::ImageButton((void*)(intptr_t)LYCF::Display::close, ImVec2(19.5f, 20.0f));
 		}
 
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.20, 0.35, 0.35, 0.0));
-
-		ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 35.5, 8.5f));
-		ImGui::ImageButton((void*)(intptr_t)LYCF::Display::close, ImVec2(19.5f, 20.0f));
 
 		ImGui::PopStyleColor(4);
 		ImGui::PopStyleVar(2);
