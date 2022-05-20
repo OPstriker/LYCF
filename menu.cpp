@@ -238,7 +238,7 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 	{
 		// Lets Get Em ANimations... Progress Stuff....
 		
-		ImGui::SetCursorPos(ImVec2((420.0f / 2) - 50.0f, (250.0f / 2) - 70.0f));
+		ImGui::SetCursorPos(ImVec2((420.0f / 2) - 50.0f, (250.0f / 2) - 80.0f));
 		LoadingIndicatorCircle("Circle", 50.0f, ImVec4(0.85f, 0.85f, 0.85f, 0.8f), ImVec4(0.85f, 0.85f, 0.85f, 1.0f), 8, 5.24f);
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 6);
@@ -277,6 +277,8 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
 
+
+
 		static bool show = false;
 		
 		if (show)
@@ -293,10 +295,12 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 
 			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 35.5, 8.5f));
 			ImGui::ImageButton((void*)(intptr_t)LYCF::Display::close, ImVec2(19.5f, 20.0f));
+
+			ImGui::PopStyleColor();
 		}
 
 
-		ImGui::PopStyleColor(4);
+		ImGui::PopStyleColor(3);
 		ImGui::PopStyleVar(2);
 
 		ImGui::EndPopup();
