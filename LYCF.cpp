@@ -1,14 +1,14 @@
 #include "_ovpn.h" // Have to call first else causes issues... with WinSock...
+#include "tab.h"
 #include "LYCF.h"
 #include <iostream>
-#include "tab.h"
+
 #include <glad/glad.h>
 #include "stb_image.h"
 #include <string.h>
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
-
 
 #include <fstream>
 #include <iostream>
@@ -230,6 +230,8 @@ void LYCF::EN_LYCF::SetDword_TManagerReg_CheckBased(bool reg)
 
 void LYCF::iBoss_LYCF::iboss_status()
 {
+
+
     SC_HANDLE path;
     SERVICE_STATUS iboss_stat;
     SC_HANDLE iboss;
@@ -242,6 +244,16 @@ void LYCF::iBoss_LYCF::iboss_status()
     iboss = OpenServiceW(path, // iBoss Path
         L"ibsaservice.exe",
         SC_MANAGER_ALL_ACCESS);
+
+    if (iboss == NULL)
+    {
+        DWORD error = GetLastError();
+
+        if (error == ERROR_SERVICE_DOES_NOT_EXIST)
+        {
+            LYCF::iBoss_LYCF::Exist = false;
+        }
+    }
     
     if (QueryServiceStatus(iboss, &iboss_stat))
     
@@ -254,6 +266,102 @@ void LYCF::iBoss_LYCF::iboss_status()
     else {
         LYCF::iBoss_LYCF::ibs_stat = false;
     }
+
+    CloseServiceHandle(path);
+    CloseServiceHandle(iboss);
+}
+
+
+
+void LYCF::iBoss_LYCF::iboss_action()
+{
+
+
+    SC_HANDLE path;
+    SERVICE_STATUS iboss_ret;
+    DWORD state{};
+    bool IsActive = true;
+
+    path = OpenSCManager(NULL,
+        SERVICES_ACTIVE_DATABASE,
+        SC_MANAGER_ALL_ACCESS);
+
+    SC_HANDLE iboss_handle = OpenService(
+        path,
+        "ibsaservice.exe",
+        SC_MANAGER_ALL_ACCESS
+    );
+
+    //asio::io_context io;
+    //asio::steady_timer t(io, asio::chrono::seconds(3));
+
+    //Validation...
+    if (iboss_handle == NULL)
+    {
+        DWORD error = GetLastError();
+
+        //if (error == ERROR_SERVICE_DOES_NOT_EXIST)
+        //{
+            IsActive = false;
+            //settings::dialog = 2;
+        //}
+
+        //CloseServiceHandle(path);
+        //CloseServiceHandle(iboss);
+    }
+
+    if (IsActive)
+    {
+        if (QueryServiceStatus(iboss_handle, &iboss_ret))
+            state = iboss_ret.dwCurrentState;
+    
+        if (state == SERVICE_RUNNING)
+        {
+            //if (ControlService(iboss_handle, SERVICE_CONTROL_STOP, &iboss_ret))
+            //{
+            //    while (iboss_ret.dwCurrentState != SERVICE_STOPPED)
+            //    {
+            //        if (QueryServiceStatus(iboss_handle, &iboss_ret));
+            //            //t.wait();
+            //
+            //        if (iboss_ret.dwCurrentState == SERVICE_STOPPED)
+            //        {
+            //
+            //            break;
+            //        }
+            //    }
+            //}
+        }
+        else
+        {
+    
+    
+        }
+    }
+}
+
+void LYCF::iBoss_LYCF::DoesiBossExist()
+{
+    SC_HANDLE Manger = OpenSCManager(NULL, SERVICES_ACTIVE_DATABASE, SC_MANAGER_ALL_ACCESS);
+
+    SC_HANDLE iboss_hndle = OpenService(Manger, "ibsaservice.exe", SC_MANAGER_ALL_ACCESS);
+
+    if (iboss_hndle == NULL)
+    {
+        DWORD ibs_error = GetLastError();
+
+        if (ibs_error == ERROR_SERVICE_DOES_NOT_EXIST || ERROR_INVALID_HANDLE || ERROR_INVALID_NAME)
+        {
+            LYCF::iBoss_LYCF::Exist = false;
+        }
+    }
+    else 
+    {
+        LYCF::iBoss_LYCF::Exist = true;
+    }
+
+    CloseServiceHandle(Manger);
+    CloseServiceHandle(iboss_hndle);
 }
 
 void LYCF::Display::ToggleButton(const char* str_id, bool* v)

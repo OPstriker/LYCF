@@ -7,7 +7,7 @@
 #include <imgui/imstb_rectpack.h>
 #include <imgui/imgui_impl_opengl3.h>
 #include <glad/glad.h>
-#include "tab.h"
+//#include "tab.h"
 #include "LYCF.h"
 #include <stdlib.h>
 //#include "icons.h"
@@ -236,51 +236,54 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 	ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
 	if (ImGui::BeginPopupModal("Prompt", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{
-		// Lets Get Em ANimations... Progress Stuff....
-		
-		ImGui::SetCursorPos(ImVec2((420.0f / 2) - 50.0f, (250.0f / 2) - 80.0f));
-		LoadingIndicatorCircle("Circle", 50.0f, ImVec4(0.85f, 0.85f, 0.85f, 0.8f), ImVec4(0.85f, 0.85f, 0.85f, 1.0f), 8, 5.24f);
-
-		ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 6);
-
-		ImGui::SetCursorPos(ImVec2((420.0f / 2) - 130, ImGui::GetCursorPosY() + 27));
-		//ImGui::BeginChild("ibs_prg_stat", ImVec2(260.0f, 45.0f), true);
-		//
-		//ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 3);
-		//
-		////ImGui::TextEx("Blocking iBoss...");
-		//ImGui::TextColored(ImVec4(0.31f, 0.78f, 0.47f, 1.0f), "Blocking iBoss");
-		//ImGui::SameLine();
-		//
-		//ImGui::SetCursorPosY((45.0f / 2) - 7.5f);
-		//Spinner("spino", 5.0f, 2.0f, spincol_1);
-		//
-		//ImGui::EndChild();
-
-		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
-		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.01f);
-
-		//ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 50);
-
-		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(1.0f, 1.0f, 1.0f, 0.0f));
-
-		cs_ProgressBar(ImGui::GetTime() * - 0.50f, ImVec2(260.0f, 45.0f), "Blocking iBoss...", ImVec4(0.31f, 0.78f, 0.47f, 1.0f));
-
-		ImGui::PopStyleVar(2);
-		ImGui::PopStyleColor();
-
-		ImGui::SetCursorPos(ImVec2(90.0f, 170.0f));
-		
+		// Close Button...
+		static bool show = true;
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.20, 0.35, 0.35, 0.0));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.20, 0.35, 0.35, 1.0));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.20, 0.35, 0.35, 0.0));
-
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
 
+		if (settings::dialog == 1) // iBoss Action Dialog
+		{
+			ImGui::SetCursorPos(ImVec2((420.0f / 2) - 50.0f, (250.0f / 2) - 80.0f));
+			LoadingIndicatorCircle("Circle", 50.0f, ImVec4(0.85f, 0.85f, 0.85f, 0.8f), ImVec4(0.85f, 0.85f, 0.85f, 1.0f), 8, 5.24f);
+
+			ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 6);
+
+			ImGui::SetCursorPos(ImVec2((420.0f / 2) - 130, ImGui::GetCursorPosY() + 27));
+
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.01f);
+
+			ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(1.0f, 1.0f, 1.0f, 0.0f));
 
 
-		static bool show = false;
-		
+			std::string val = LYCF::iBoss_LYCF::ibs_stat ? "Blocking iBoss..." : "Enabling iBoss...";
+
+
+			cs_ProgressBar(ImGui::GetTime() * -0.50f, ImVec2(260.0f, 45.0f), val.c_str(), ImVec4(0.20, 0.35, 0.35, 1.0)); // 0.31f, 0.78f, 0.47f, 1.0f
+
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor();
+
+			ImGui::SetCursorPos(ImVec2(90.0f, 170.0f));
+
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.20, 0.35, 0.35, 0.0));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.20, 0.35, 0.35, 1.0));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.20, 0.35, 0.35, 0.0));
+
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
+
+			ImGui::PopStyleColor(3);
+			ImGui::PopStyleVar(2);
+		}
+		else if (settings::dialog == 2)
+		{
+
+			ImGui::SetCursorPos(ImVec2(45.0f, 120.0f));
+			ImGui::Text("iBoss was Not Found, Please try again later...");
+		}
+
 		if (show)
 		{
 			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 35.5, 8.5f));
@@ -289,7 +292,9 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 				*close = false;
 				LYCF::iBoss_LYCF::iBossBlockDialog = false;
 				ImGui::CloseCurrentPopup();
+				LYCF::iBoss_LYCF::iboss_status();
 			}
+
 
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.20, 0.35, 0.35, 0.0));
 
@@ -299,9 +304,8 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 			ImGui::PopStyleColor();
 		}
 
-
 		ImGui::PopStyleColor(3);
-		ImGui::PopStyleVar(2);
+		ImGui::PopStyleVar();
 
 		ImGui::EndPopup();
 	}
@@ -339,19 +343,6 @@ void style::theme_2()
 	style->Colors[ImGuiCol_CheckMark] = ImColor(80, 200, 120);
 
 }
-
-// close
-//bool LYCF::Display::LoadIcons = true;
-//
-//
-//GLuint LYCF::Display::minz;
-//GLuint LYCF::Display::close;
-//
-//static int close_width = 0;
-//static int close_height = 0;
-//
-//static int minz_width = 0;
-//static int minz_height = 0;
 
 
 void LYCF::Display::caption()
@@ -423,6 +414,7 @@ bool LYCF::iBoss_LYCF::ibs_stat;
 bool LYCF::iBoss_LYCF::iBossBlockDialog;
 bool LYCF::iBoss_LYCF::iboss_persist;
 bool LYCF::iBoss_LYCF::iBossLoginpg;
+bool LYCF::iBoss_LYCF::Exist;
 
 
 // VPN bool...
@@ -488,6 +480,7 @@ void style::render()
 		{
 			settings::tab = 2;
 			LYCF::iBoss_LYCF::iboss_status(); // iBoss Status Updater...
+			LYCF::iBoss_LYCF::DoesiBossExist();
 		}
 		if (ImGui::IsItemHovered()) {
 			ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
@@ -683,15 +676,26 @@ void style::render()
 			{
 				//LYCF::Display::Prompt();
 				//Prompt = true;
+				LYCF::iBoss_LYCF::iboss_action();
 				LYCF::iBoss_LYCF::iBossBlockDialog = true;
+				
+				LYCF::iBoss_LYCF::Exist ? settings::dialog = 1 : settings::dialog = 2;
+					
+
 				//LYCF::Display::Prompt = true;
+			}
+			if (ImGui::IsItemClicked())
+			{
+				LYCF::iBoss_LYCF::iboss_action();
 			}
 			if (ImGui::IsItemHovered())
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 			ImGui::PopStyleVar(2);
 			ImGui::PopStyleColor(4);
+
 			ImGui::EndChild(); //iBoss - Block End...
 
+			
 			// iBoss Login
 
 			ImGui::Spacing();
@@ -728,7 +732,7 @@ void style::render()
 
 			// iBoss Persist
 			ImGui::Spacing();
-			ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
+			ImGui::PushStyleColor(ImGuiCol_Border, LYCF::iBoss_LYCF::iboss_persist ? ImVec4(0.31f, 0.78f, 0.47f, 0.5f) : ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
 			ImGui::BeginChild("iBoss-Persist)", ImVec2(ImGui::GetWindowWidth() - 285.0f, 60.0f), true); // iBoss - Persis Begin...
 			ImGui::SetCursorPos(ImVec2(10.0f, 20.0f));
 			ImGui::Text("Persistent Block (optional)");
@@ -739,6 +743,7 @@ void style::render()
 			LYCF::Display::ToggleButton("btn", &LYCF::iBoss_LYCF::iboss_persist);
 			if (ImGui::IsItemHovered())
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+			ImGui::PopStyleColor();
 			ImGui::PopStyleVar();
 			ImGui::EndChild(); //iBoss - Persis End...
 
@@ -756,7 +761,7 @@ void style::render()
 
 
 			ImGui::PopStyleVar();
-			ImGui::PopStyleColor();
+			//ImGui::PopStyleColor();
 		}
 
 		//static bool vpnstat = false;

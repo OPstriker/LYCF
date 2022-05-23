@@ -53,14 +53,19 @@ namespace LYCF {
 	public:
 
 		// BOOLS
+		static bool Exist;
 		static bool ibs_stat;
 		static bool iboss_persist;
 		static bool iBossBlockDialog;
 		static bool iBossLoginpg;
 
 
-		static void iboss_status();
 
+
+		static void iboss_status();
+		static void iboss_action();
+		static void DoesiBossExist();
+		static std::string ibs_stat_log_class;
 
 	};
 
