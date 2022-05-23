@@ -13,9 +13,9 @@
 #include <fstream>
 #include <iostream>
 
-#include <openvpn/common/platform.hpp>
+//#include <openvpn/common/platform.hpp>
 //#include <openvpn/options/merge.hpp>
-#include <openvpn/client/cliconstants.hpp>
+//#include <openvpn/client/cliconstants.hpp>
 
 // Caption...
 
@@ -244,16 +244,6 @@ void LYCF::iBoss_LYCF::iboss_status()
     iboss = OpenServiceW(path, // iBoss Path
         L"ibsaservice.exe",
         SC_MANAGER_ALL_ACCESS);
-
-    if (iboss == NULL)
-    {
-        DWORD error = GetLastError();
-
-        if (error == ERROR_SERVICE_DOES_NOT_EXIST)
-        {
-            LYCF::iBoss_LYCF::Exist = false;
-        }
-    }
     
     if (QueryServiceStatus(iboss, &iboss_stat))
     
@@ -294,6 +284,8 @@ void LYCF::iBoss_LYCF::iboss_action()
 
     //asio::io_context io;
     //asio::steady_timer t(io, asio::chrono::seconds(3));
+    //
+    //t()
 
     //Validation...
     if (iboss_handle == NULL)
@@ -405,21 +397,21 @@ void LYCF::Display::ToggleButton(const char* str_id, bool* v)
 }
 
 
-class Client : public openvpn::ClientAPI::OpenVPNClient
-{
-public:
-    virtual void event(const openvpn::ClientAPI::Event&) override
-    {  // events delivered here
-
-        
-    }
-
-    virtual void log(const openvpn::ClientAPI::LogInfo&) override
-    {  // logging delivered here
-
-    }
-
-};
+//class Client : public openvpn::ClientAPI::OpenVPNClient
+//{
+//public:
+//    virtual void event(const openvpn::ClientAPI::Event&) override
+//    {  // events delivered here
+//
+//        
+//    }
+//
+//    virtual void log(const openvpn::ClientAPI::LogInfo&) override
+//    {  // logging delivered here
+//
+//    }
+//
+//};
 
 
 

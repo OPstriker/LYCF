@@ -18,6 +18,9 @@
 #include "stb_image.h"
 #include "font.h"
 
+#include <chrono>
+#include <thread>
+#include <future>
 
 void style::load_font()
 {
@@ -217,6 +220,15 @@ static int close_height = 0;
 static int minz_width = 0;
 static int minz_height = 0;
 
+bool showclosebutton = true;
+
+static void CloseButtonVisible(std::chrono::seconds delay, bool stat)
+{
+	std::this_thread::sleep_for(delay);
+	showclosebutton = stat;
+}
+
+
 // Block Dialog
 void LYCF::Display::Prompt(const char* Text, bool* close)
 {
@@ -231,13 +243,16 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 	static ImU32 spincol_1 = ImGui::GetColorU32(ImVec4(0.85f, 0.85f, 0.85f, 0.8f));
 
 	bool open = true;
+
+
+
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 16);
 	ImGui::SetNextWindowSize(ImVec2(420.0f, 250.0f));
 	ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
 	if (ImGui::BeginPopupModal("Prompt", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{
 		// Close Button...
-		static bool show = true;
+
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.20, 0.35, 0.35, 0.0));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.20, 0.35, 0.35, 1.0));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.20, 0.35, 0.35, 0.0));
@@ -245,6 +260,7 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 
 		if (settings::dialog == 1) // iBoss Action Dialog
 		{
+
 			ImGui::SetCursorPos(ImVec2((420.0f / 2) - 50.0f, (250.0f / 2) - 80.0f));
 			LoadingIndicatorCircle("Circle", 50.0f, ImVec4(0.85f, 0.85f, 0.85f, 0.8f), ImVec4(0.85f, 0.85f, 0.85f, 1.0f), 8, 5.24f);
 
@@ -284,7 +300,9 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 			ImGui::Text("iBoss was Not Found, Please try again later...");
 		}
 
-		if (show)
+
+
+		if (showclosebutton)
 		{
 			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 35.5, 8.5f));
 			if (ImGui::Button(" ", ImVec2(26.5f, 25.0f)))
@@ -303,6 +321,17 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 
 			ImGui::PopStyleColor();
 		}
+
+		static bool run = true;
+
+		if (run)
+		{
+			auto s1 = std::async(std::launch::async, CloseButtonVisible, std::chrono::seconds(3), false);
+
+			run = false;
+		}
+
+		showclosebutton = false;
 
 		ImGui::PopStyleColor(3);
 		ImGui::PopStyleVar();
