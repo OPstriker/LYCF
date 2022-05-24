@@ -1,8 +1,0 @@
-x64-windows/
-x64-windows/include/
-x64-windows/include/ovpn-dco-win/
-x64-windows/include/ovpn-dco-win/uapi.h
-x64-windows/share/
-x64-windows/share/ovpn-dco-win/
-x64-windows/share/ovpn-dco-win/copyright
-x64-windows/share/ovpn-dco-win/vcpkg_abi_info.txt

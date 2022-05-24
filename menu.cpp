@@ -1,15 +1,28 @@
 ﻿#define IMGUI_DEFINE_MATH_OPERATORS
 
+
+
 #include "style.h"
 #include <imgui/imgui.h>
 #include <imgui/imguipp.h>
 #include <imgui/imgui_internal.h>
 #include <imgui/imstb_rectpack.h>
 #include <imgui/imgui_impl_opengl3.h>
+
+
+
 #include <glad/glad.h>
 //#include "tab.h"
+
+// Boost Lib
+//#include <boost/asio.hpp>
+//#include <boost/thread/thread.hpp>
+//#include <boost/bind/bind.hpp>
+//#include <boost/date_time/posix_time/posix_time.hpp>
 #include "LYCF.h"
-#include <stdlib.h>
+
+
+//#include <stdlib.h>
 //#include "icons.h"
 //#include "iconcpp.h"
 #include "IconsFontAwesome4.h"
@@ -21,6 +34,8 @@
 #include <chrono>
 #include <thread>
 #include <future>
+
+
 
 void style::load_font()
 {
@@ -190,7 +205,7 @@ void LoadingIndicatorCircle(const char* label, const float indicator_radius,
 		const auto x = indicator_radius * std::sin(degree_offset * i);
 		const auto y = indicator_radius * std::cos(degree_offset * i);
 
-		auto val1 = 0;
+		auto val1 = 0.0f;
 		auto val2 = std::sin(t * speed - i * degree_offset);
 
 		const auto growth = max(val1, val2);
@@ -220,14 +235,24 @@ static int close_height = 0;
 static int minz_width = 0;
 static int minz_height = 0;
 
-bool showclosebutton = true;
+static bool showclosebutton = false;
 
-static void CloseButtonVisible(std::chrono::seconds delay, bool stat)
+static void showclsbtn()
 {
-	std::this_thread::sleep_for(delay);
-	showclosebutton = stat;
+
+	showclosebutton = true;
+
 }
 
+//boost::asio::io_service io;
+//
+//static void async_wait()
+//{
+//	boost::asio::deadline_timer time(io, boost::posix_time::seconds(3));
+//
+//
+//
+//}
 
 // Block Dialog
 void LYCF::Display::Prompt(const char* Text, bool* close)
@@ -324,14 +349,15 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 
 		static bool run = true;
 
-		if (run)
-		{
-			auto s1 = std::async(std::launch::async, CloseButtonVisible, std::chrono::seconds(3), false);
+		if (run) {
 
-			run = false;
+
+
+
+
 		}
 
-		showclosebutton = false;
+
 
 		ImGui::PopStyleColor(3);
 		ImGui::PopStyleVar();

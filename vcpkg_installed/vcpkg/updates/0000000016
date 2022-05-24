@@ -1,9 +1,0 @@
-Package: tap-windows6
-Version: 9.21.2-0e30f5c
-Port-Version: 1
-Architecture: x64-windows
-Multi-Arch: same
-Abi: 58e70d31e855b43db61ffecb07fee51490a0dc03c4fea7136762c1012da285bf
-Description: an NDIS 6 implementation of the TAP-Windows driver, used by OpenVPN and other apps. Note: This package only contains the headers for the driver.
-Type: Port
-Status: install ok half-installed
