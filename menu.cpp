@@ -15,7 +15,7 @@
 //#include "tab.h"
 
 // Boost Lib
-//#include <boost/asio.hpp>
+
 //#include <boost/thread/thread.hpp>
 //#include <boost/bind/bind.hpp>
 //#include <boost/date_time/posix_time/posix_time.hpp>
@@ -235,24 +235,18 @@ static int close_height = 0;
 static int minz_width = 0;
 static int minz_height = 0;
 
-static bool showclosebutton = false;
+//static bool showclosebutton = true;
+bool LYCF::iBoss_LYCF::ibsapopup_exit = false;
 
 static void showclsbtn()
 {
 
-	showclosebutton = true;
+	//showclosebutton = true;
+	LYCF::iBoss_LYCF::ibsapopup_exit = true;
 
 }
 
-//boost::asio::io_service io;
-//
-//static void async_wait()
-//{
-//	boost::asio::deadline_timer time(io, boost::posix_time::seconds(3));
-//
-//
-//
-//}
+
 
 // Block Dialog
 void LYCF::Display::Prompt(const char* Text, bool* close)
@@ -325,9 +319,9 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 			ImGui::Text("iBoss was Not Found, Please try again later...");
 		}
 
+		static bool run = true;
 
-
-		if (showclosebutton)
+		if (LYCF::iBoss_LYCF::ibsapopup_exit)
 		{
 			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 35.5, 8.5f));
 			if (ImGui::Button(" ", ImVec2(26.5f, 25.0f)))
@@ -336,6 +330,8 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 				LYCF::iBoss_LYCF::iBossBlockDialog = false;
 				ImGui::CloseCurrentPopup();
 				LYCF::iBoss_LYCF::iboss_status();
+				LYCF::iBoss_LYCF::ibsapopup_exit = false;
+				run = true;
 			}
 
 
@@ -347,14 +343,14 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 			ImGui::PopStyleColor();
 		}
 
-		static bool run = true;
+
 
 		if (run) {
 
+			std::thread tst(&LYCF::iBoss_LYCF::ibsa_autocheck);
 
-
-
-
+			tst.detach();
+			run = false;
 		}
 
 

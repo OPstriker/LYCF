@@ -1,6 +1,7 @@
 #pragma once
 //#include "_ovpn.h"
 
+
 #include <Windows.h>
 #include <glad/glad.h>
 #include <shellapi.h>
@@ -59,6 +60,7 @@ namespace LYCF {
 		static bool iboss_persist;
 		static bool iBossBlockDialog;
 		static bool iBossLoginpg;
+		static bool ibsapopup_exit;
 
 
 
@@ -66,6 +68,7 @@ namespace LYCF {
 		static void iboss_status();
 		static void iboss_action();
 		static void DoesiBossExist();
+		static void ibsa_autocheck();
 		static std::string ibs_stat_log_class;
 
 	};

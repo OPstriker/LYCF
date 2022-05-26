@@ -1,4 +1,8 @@
  // Have to call first else causes issues... with WinSock...
+
+#include <boost/asio.hpp>
+#include <boost/bind.hpp>
+
 #include "tab.h"
 #include "LYCF.h"
 #include <iostream>
@@ -12,6 +16,7 @@
 
 #include <fstream>
 #include <iostream>
+
 
 //#include <openvpn/common/platform.hpp>
 //#include <openvpn/options/merge.hpp>
@@ -354,6 +359,26 @@ void LYCF::iBoss_LYCF::DoesiBossExist()
 
     CloseServiceHandle(Manger);
     CloseServiceHandle(iboss_hndle);
+}
+
+void setbool(const boost::system::error_code&)
+{
+    LYCF::iBoss_LYCF::ibsapopup_exit = true;
+}
+
+
+
+void LYCF::iBoss_LYCF::ibsa_autocheck()
+{
+
+    using namespace std::chrono_literals;
+
+    boost::asio::io_context io;
+    boost::asio::steady_timer t(io, boost::asio::chrono::milliseconds(1500));
+    
+    t.async_wait(&setbool);
+
+    io.run();
 }
 
 void LYCF::Display::ToggleButton(const char* str_id, bool* v)
