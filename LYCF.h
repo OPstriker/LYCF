@@ -61,6 +61,7 @@ namespace LYCF {
 		static bool iBossBlockDialog;
 		static bool iBossLoginpg;
 		static bool ibsapopup_exit;
+		static bool ibsaclosex;
 
 
 

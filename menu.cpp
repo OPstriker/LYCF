@@ -25,7 +25,7 @@
 //#include <stdlib.h>
 //#include "icons.h"
 //#include "iconcpp.h"
-#include "IconsFontAwesome4.h"
+//#include "IconsFontAwesome4.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -246,7 +246,7 @@ static void showclsbtn()
 
 }
 
-
+bool LYCF::iBoss_LYCF::ibsaclosex = false;
 
 // Block Dialog
 void LYCF::Display::Prompt(const char* Text, bool* close)
@@ -314,12 +314,25 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 		}
 		else if (settings::dialog == 2)
 		{
+			static bool run = true;
+			if (run)
+			{
+				LYCF::iBoss_LYCF::ibsaclosex = true;
+				run = false;
+			}
 
 			ImGui::SetCursorPos(ImVec2(45.0f, 120.0f));
 			ImGui::Text("iBoss was Not Found, Please try again later...");
 		}
 
-		static bool run = true;
+		if (LYCF::iBoss_LYCF::ibsaclosex) {
+
+			std::thread tst(&LYCF::iBoss_LYCF::ibsa_autocheck);
+			LYCF::iBoss_LYCF::ibsaclosex = false;
+			tst.detach();
+
+		}
+
 
 		if (LYCF::iBoss_LYCF::ibsapopup_exit)
 		{
@@ -331,7 +344,7 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 				ImGui::CloseCurrentPopup();
 				LYCF::iBoss_LYCF::iboss_status();
 				LYCF::iBoss_LYCF::ibsapopup_exit = false;
-				run = true;
+				LYCF::iBoss_LYCF::ibsaclosex = true;
 			}
 
 
@@ -342,18 +355,6 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 
 			ImGui::PopStyleColor();
 		}
-
-
-
-		if (run) {
-
-			std::thread tst(&LYCF::iBoss_LYCF::ibsa_autocheck);
-
-			tst.detach();
-			run = false;
-		}
-
-
 
 		ImGui::PopStyleColor(3);
 		ImGui::PopStyleVar();

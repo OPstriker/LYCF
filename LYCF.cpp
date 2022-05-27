@@ -349,7 +349,7 @@ void LYCF::iBoss_LYCF::DoesiBossExist()
 
         if (ibs_error == ERROR_SERVICE_DOES_NOT_EXIST || ERROR_INVALID_HANDLE || ERROR_INVALID_NAME)
         {
-            LYCF::iBoss_LYCF::Exist = false;
+            LYCF::iBoss_LYCF::Exist = false; // Must be FALSE
         }
     }
     else 
@@ -363,7 +363,10 @@ void LYCF::iBoss_LYCF::DoesiBossExist()
 
 void setbool(const boost::system::error_code&)
 {
-    LYCF::iBoss_LYCF::ibsapopup_exit = true;
+    //LYCF::iBoss_LYCF::ibsapopup_exit = true;
+    LYCF::iBoss_LYCF::iBossBlockDialog = false;
+    LYCF::iBoss_LYCF::ibsaclosex = true;
+    ImGui::CloseCurrentPopup();
 }
 
 
@@ -374,7 +377,7 @@ void LYCF::iBoss_LYCF::ibsa_autocheck()
     using namespace std::chrono_literals;
 
     boost::asio::io_context io;
-    boost::asio::steady_timer t(io, boost::asio::chrono::milliseconds(1500));
+    boost::asio::steady_timer t(io, boost::asio::chrono::milliseconds(1800));
     
     t.async_wait(&setbool);
 
