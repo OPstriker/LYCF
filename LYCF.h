@@ -26,6 +26,7 @@ namespace LYCF {
 
 		static GLuint close;
 		static GLuint minz;
+		static GLuint error;
 	};
 
 	class EN_LYCF

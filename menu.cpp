@@ -228,12 +228,16 @@ bool LYCF::Display::LoadIcons = true;
 
 GLuint LYCF::Display::minz;
 GLuint LYCF::Display::close;
+GLuint LYCF::Display::error;
 
 static int close_width = 0;
 static int close_height = 0;
 
 static int minz_width = 0;
 static int minz_height = 0;
+
+static int error_width = 0;
+static int error_height = 0;
 
 //static bool showclosebutton = true;
 bool LYCF::iBoss_LYCF::ibsapopup_exit = false;
@@ -321,7 +325,11 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 				run = false;
 			}
 
-			ImGui::SetCursorPos(ImVec2(45.0f, 120.0f));
+			//ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 125.5f, 70.5f));
+			ImGui::SetCursorPos(ImVec2((420.0f / 2) - 48.0f, (250.0f / 2) - 78.0f));
+			ImGui::Image((void*)(intptr_t)LYCF::Display::error, ImVec2(96.0f, 96.0f));
+
+			ImGui::SetCursorPos(ImVec2(45.0f, 180.0f));
 			ImGui::Text("iBoss was Not Found, Please try again later...");
 		}
 
@@ -352,6 +360,7 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 
 			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 35.5, 8.5f));
 			ImGui::ImageButton((void*)(intptr_t)LYCF::Display::close, ImVec2(19.5f, 20.0f));
+
 
 			ImGui::PopStyleColor();
 		}
@@ -407,6 +416,8 @@ void LYCF::Display::caption()
 		bool close_ret = LoadTextureFromFile("icons//Close.png", &LYCF::Display::close, &close_width, &close_height);
 
 		bool minz_ret = LoadTextureFromFile("icons//Minimize.png", &LYCF::Display::minz, &minz_width, &minz_height);
+
+		bool error_ret = LoadTextureFromFile("icons//error.png", &LYCF::Display::error, &error_width, &error_height);
 
 		LYCF::Display::LoadIcons = false;
 	}

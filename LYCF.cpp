@@ -377,7 +377,7 @@ void LYCF::iBoss_LYCF::ibsa_autocheck()
     using namespace std::chrono_literals;
 
     boost::asio::io_context io;
-    boost::asio::steady_timer t(io, boost::asio::chrono::milliseconds(1800));
+    boost::asio::steady_timer t(io, boost::asio::chrono::milliseconds(2500));
     
     t.async_wait(&setbool);
 
