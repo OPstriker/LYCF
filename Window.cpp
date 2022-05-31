@@ -103,7 +103,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         WS_EX_APPWINDOW,
         wc.lpszClassName,
         "LYCF",
-        WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_VISIBLE,
+        WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_VISIBLE, // 
         520, 250, // 500, 250
         g_display_w, g_display_h,
         0, 0,
@@ -318,25 +318,26 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         return 0;
         break;
     case WM_NCCALCSIZE: {
-       if (!wParam) return DefWindowProc(hWnd, msg, wParam, lParam);
-       UINT dpi = GetDpiForWindow(hWnd);
-       
-       
-       int frame_x = GetSystemMetricsForDpi(SM_CXFRAME, dpi);
-       int frame_y = GetSystemMetricsForDpi(SM_CYFRAME, dpi);
-       int padding = GetSystemMetricsForDpi(SM_CXPADDEDBORDER, dpi);
-       
-       NCCALCSIZE_PARAMS* params = (NCCALCSIZE_PARAMS*)lParam;
-       RECT* requested_client_rect = params->rgrc;
-       
-       requested_client_rect->right -= frame_x + padding;
-       requested_client_rect->left += frame_x + padding;
-       requested_client_rect->bottom -= frame_y + padding;
-       
-       return 0;
-       break;
+        if (!wParam) return DefWindowProc(hWnd, msg, wParam, lParam);
+        UINT dpi = GetDpiForWindow(hWnd);
+
+
+        int frame_x = GetSystemMetricsForDpi(SM_CXFRAME, dpi);
+        int frame_y = GetSystemMetricsForDpi(SM_CYFRAME, dpi);
+        int padding = GetSystemMetricsForDpi(SM_CXPADDEDBORDER, dpi);
+
+        NCCALCSIZE_PARAMS* params = (NCCALCSIZE_PARAMS*)lParam;
+        RECT* requested_client_rect = params->rgrc;
+
+        requested_client_rect->right -= frame_x + padding;
+        requested_client_rect->left += frame_x + padding;
+        requested_client_rect->bottom -= frame_y + padding;
+
+        return 0;
+        break;
     }
-    case WM_NCHITTEST: {
+    case WM_NCHITTEST: 
+    {
         // Let the default procedure handle resizing areas
         LRESULT hit = DefWindowProc(hWnd, msg, wParam, lParam);
         switch (hit) {
@@ -365,9 +366,9 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         case HTBOTTOMLEFT: {
             return hit;
         }
-        }
+      }
         //if (hit == HTCLIENT) hit = HTCAPTION;
-
+    
         // Looks like adjustment happening in NCCALCSIZE is messing with the detection
         // of the top hit area so manually fixing that.
         UINT dpi = GetDpiForWindow(hWnd);
@@ -380,17 +381,17 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         if (cursor_point.y > 0 && cursor_point.y < frame_y + padding) {
             return HTTOP;
         }
-
+    
         // Since we are drawing our own caption, thi needs to be a custom test
-
+    
         return HTCLIENT;
     }
     case WM_LYCF: {
         switch (lParam)
         {
         case WM_LBUTTONUP: {
-            if(SetForegroundWindow(hWnd))
-            ShowWindow(hWnd, SW_RESTORE);
+            if (SetForegroundWindow(hWnd))
+                ShowWindow(hWnd, SW_RESTORE);
             break;
         }
         case WM_RBUTTONUP: {
@@ -419,7 +420,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 {
                     ShowWindow(hWnd, SW_HIDE);
                 }
-                else 
+                else
                 {
                     ShowWindow(hWnd, SW_RESTORE);
                     SetActiveWindow(hWnd);
@@ -432,7 +433,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 PostMessage(hWnd, WM_QUIT, 0, 0);
                 PostMessage(hWnd, WM_DESTROY, 0, 0);
             }
-            else 
+            else
             {
                 NULL; // Lets just Ingore this...
             }
@@ -441,6 +442,10 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         default:
             return DefWindowProc(hWnd, msg, wParam, lParam);
         };
+        break;
+    }
+    case WM_SIZING: {
+        SwapBuffers(g_HDCDeviceContext);
         break;
     }
     case WM_SYSKEYDOWN: {
