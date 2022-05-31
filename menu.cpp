@@ -329,8 +329,17 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 			ImGui::SetCursorPos(ImVec2((420.0f / 2) - 48.0f, (250.0f / 2) - 78.0f));
 			ImGui::Image((void*)(intptr_t)LYCF::Display::error, ImVec2(96.0f, 96.0f));
 
-			ImGui::SetCursorPos(ImVec2(45.0f, 180.0f));
+			ImGui::PushStyleColor(, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+
+			ImGui::SetCursorPos(ImVec2((420.0f / 2) - 48.0f, (250.0f / 2) - 78.0f));
+			ImGui::BeginChild("err_ibs", ImVec2(120.0f, 50.0));
 			ImGui::Text("iBoss was Not Found, Please try again later...");
+			ImGui::EndChild();
+
+			ImGui::PopStyleColor();
+
+			ImGui::SetCursorPos(ImVec2(45.0f, 180.0f));
+
 		}
 
 		if (LYCF::iBoss_LYCF::ibsaclosex) {
@@ -909,7 +918,7 @@ void style::render()
 				static ImU32 spin_colEN = ImGui::GetColorU32(ImVec4(0.85f, 0.85f, 0.85f, 0.8f));
 
 				ImGui::SetCursorPosX(ImGui::GetColumnOffset() + 100.0f);
-				Spinner("heh", 22.0f, 10, spin_colEN);
+				Spinner("heh", 22.0f, 10, spin_colEN); 
 			}
 
 
