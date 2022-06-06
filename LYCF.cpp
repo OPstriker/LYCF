@@ -396,8 +396,6 @@ void ibsa_eval_set_val()
         LYCF::iBoss_LYCF::iboss_status();
     }
 
-
-
 }
 
 void LYCF::iBoss_LYCF::ibsa_action_eval()
