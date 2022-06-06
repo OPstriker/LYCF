@@ -1,7 +1,9 @@
  // Have to call first else causes issues... with WinSock...
 
+// Boost.asio
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 #include "tab.h"
 #include "LYCF.h"
@@ -236,7 +238,6 @@ void LYCF::EN_LYCF::SetDword_TManagerReg_CheckBased(bool reg)
 void LYCF::iBoss_LYCF::iboss_status()
 {
 
-
     SC_HANDLE path;
     SERVICE_STATUS iboss_stat;
     SC_HANDLE iboss;
@@ -266,77 +267,6 @@ void LYCF::iBoss_LYCF::iboss_status()
     CloseServiceHandle(iboss);
 }
 
-
-
-void LYCF::iBoss_LYCF::iboss_action()
-{
-
-
-    SC_HANDLE path;
-    SERVICE_STATUS iboss_ret;
-    DWORD state{};
-    bool IsActive = true;
-
-    path = OpenSCManager(NULL,
-        SERVICES_ACTIVE_DATABASE,
-        SC_MANAGER_ALL_ACCESS);
-
-    SC_HANDLE iboss_handle = OpenService(
-        path,
-        "ibsaservice.exe",
-        SC_MANAGER_ALL_ACCESS
-    );
-
-    //asio::io_context io;
-    //asio::steady_timer t(io, asio::chrono::seconds(3));
-    //
-    //t()
-
-    //Validation...
-    if (iboss_handle == NULL)
-    {
-        DWORD error = GetLastError();
-
-        //if (error == ERROR_SERVICE_DOES_NOT_EXIST)
-        //{
-            IsActive = false;
-            //settings::dialog = 2;
-        //}
-
-        //CloseServiceHandle(path);
-        //CloseServiceHandle(iboss);
-    }
-
-    if (IsActive)
-    {
-        if (QueryServiceStatus(iboss_handle, &iboss_ret))
-            state = iboss_ret.dwCurrentState;
-    
-        if (state == SERVICE_RUNNING)
-        {
-            //if (ControlService(iboss_handle, SERVICE_CONTROL_STOP, &iboss_ret))
-            //{
-            //    while (iboss_ret.dwCurrentState != SERVICE_STOPPED)
-            //    {
-            //        if (QueryServiceStatus(iboss_handle, &iboss_ret));
-            //            //t.wait();
-            //
-            //        if (iboss_ret.dwCurrentState == SERVICE_STOPPED)
-            //        {
-            //
-            //            break;
-            //        }
-            //    }
-            //}
-        }
-        else
-        {
-    
-    
-        }
-    }
-}
-
 void LYCF::iBoss_LYCF::DoesiBossExist()
 {
     SC_HANDLE Manger = OpenSCManager(NULL, SERVICES_ACTIVE_DATABASE, SC_MANAGER_ALL_ACCESS);
@@ -352,7 +282,7 @@ void LYCF::iBoss_LYCF::DoesiBossExist()
             LYCF::iBoss_LYCF::Exist = false; // Must be FALSE
         }
     }
-    else 
+    else
     {
         LYCF::iBoss_LYCF::Exist = true;
     }
@@ -361,6 +291,129 @@ void LYCF::iBoss_LYCF::DoesiBossExist()
     CloseServiceHandle(iboss_hndle);
 }
 
+DWORD LYCF::iBoss_LYCF::ibsastat_dwrd;
+
+void ibsa_stat_eval(const boost::system::error_code&)
+{
+
+    SC_HANDLE eval_path;
+    SC_HANDLE ibs_evalhdl;
+    SERVICE_STATUS ibseval_ret;
+
+    eval_path = OpenSCManager(
+        NULL,
+        SERVICES_ACTIVE_DATABASE,
+        SC_MANAGER_ALL_ACCESS
+    );
+
+    ibs_evalhdl = OpenService(
+        eval_path,
+        "ibsaservice.exe",
+        SC_MANAGER_ALL_ACCESS
+    );
+
+
+
+    if (QueryServiceStatus(ibs_evalhdl, &ibseval_ret))
+    {
+        LYCF::iBoss_LYCF::ibsastat_dwrd = ibseval_ret.dwCurrentState;
+    }
+    else {
+        goto eval_cleanup;
+    }
+
+eval_cleanup: 
+    {
+    CloseServiceHandle(eval_path);
+    CloseServiceHandle(ibs_evalhdl);
+    }
+}
+
+bool LYCF::iBoss_LYCF::ibsa_start_active = false;
+bool LYCF::iBoss_LYCF::ibsa_stop_active = false;
+
+
+void LYCF::iBoss_LYCF::iboss_action()
+{
+
+    DWORD state{};
+    SC_HANDLE path_2;
+    SC_HANDLE iboss_handle;
+    SERVICE_STATUS iboss_ret;
+
+    path_2 = OpenSCManager(
+        NULL,
+        SERVICES_ACTIVE_DATABASE,
+        SC_MANAGER_ALL_ACCESS
+    );
+
+    iboss_handle = OpenService(
+        path_2,
+        "ibsaservice.exe",
+        SC_MANAGER_ALL_ACCESS
+    );
+
+    if (LYCF::iBoss_LYCF::ibs_stat)
+    {
+        if (!ControlService(iboss_handle, SERVICE_CONTROL_STOP, &iboss_ret))
+        {
+            goto cleanup;
+        }
+        else {
+            LYCF::iBoss_LYCF::ibsa_stop_active = true;
+        }
+    }
+    else
+    {
+        if (!StartService(iboss_handle, 0, NULL))
+        {
+            goto cleanup;
+        }
+        else {
+            LYCF::iBoss_LYCF::ibsa_start_active = true;
+        }
+    }
+
+    goto cleanup;
+cleanup:
+    {
+        CloseServiceHandle(path_2);
+        CloseServiceHandle(iboss_handle);
+    }
+}
+
+void ibsa_eval_set_val()
+{
+    if (LYCF::iBoss_LYCF::ibsastat_dwrd == SERVICE_STOP_PENDING || SERVICE_START_PENDING && LYCF::iBoss_LYCF::ibsa_stop_active || LYCF::iBoss_LYCF::ibsa_start_active)
+    {
+        LYCF::iBoss_LYCF::exec_eval = true;
+    }
+
+    if (LYCF::iBoss_LYCF::ibsastat_dwrd == SERVICE_STOPPED || SERVICE_RUNNING && LYCF::iBoss_LYCF::ibsa_stop_active || LYCF::iBoss_LYCF::ibsa_start_active)
+    {
+        LYCF::iBoss_LYCF::exec_eval = false;
+        LYCF::iBoss_LYCF::iBossBlockDialog = false;
+        LYCF::iBoss_LYCF::iboss_status();
+    }
+
+
+
+}
+
+void LYCF::iBoss_LYCF::ibsa_action_eval()
+{
+    boost::asio::io_service io;
+
+    boost::asio::deadline_timer ti(io, boost::posix_time::seconds(4));
+    ti.async_wait(ibsa_stat_eval);
+
+    io.run();
+
+    ibsa_eval_set_val();
+    LYCF::iBoss_LYCF::exec_eval = true;
+}
+
+
 void setbool(const boost::system::error_code&)
 {
     //LYCF::iBoss_LYCF::ibsapopup_exit = true;
@@ -368,7 +421,6 @@ void setbool(const boost::system::error_code&)
     LYCF::iBoss_LYCF::ibsaclosex = true;
     ImGui::CloseCurrentPopup();
 }
-
 
 
 void LYCF::iBoss_LYCF::ibsa_autocheck()
@@ -383,6 +435,7 @@ void LYCF::iBoss_LYCF::ibsa_autocheck()
 
     io.run();
 }
+
 
 void LYCF::Display::ToggleButton(const char* str_id, bool* v)
 {
@@ -440,7 +493,7 @@ void LYCF::Display::ToggleButton(const char* str_id, bool* v)
 //    }
 //
 //};
-
+//
 
 
 void LYCF::VPN_LYCF::vpnconnect()

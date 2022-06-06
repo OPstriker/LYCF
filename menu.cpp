@@ -252,6 +252,35 @@ static void showclsbtn()
 
 bool LYCF::iBoss_LYCF::ibsaclosex = false;
 
+bool LYCF::iBoss_LYCF::ibsaction_eval = false;
+
+bool LYCF::iBoss_LYCF::exec_eval = true;
+
+//void run_test()
+//
+//{
+//	if (LYCF::iBoss_LYCF::ibsaction_eval)
+//	{
+//		std::thread tb(LYCF::iBoss_LYCF::ibsaeval_autocheck);
+//
+//		tb.detach();
+//
+//		if (LYCF::iBoss_LYCF::ibsastat_dwrd == SERVICE_STOPPED)
+//		{
+//			LYCF::iBoss_LYCF::iBossBlockDialog = false;
+//			ImGui::CloseCurrentPopup();
+//			LYCF::iBoss_LYCF::iboss_status();
+//		}
+//		else if (LYCF::iBoss_LYCF::ibsastat_dwrd == SERVICE_RUNNING)
+//		{
+//			LYCF::iBoss_LYCF::iBossBlockDialog = false;
+//			ImGui::CloseCurrentPopup();
+//			LYCF::iBoss_LYCF::iboss_status();
+//		}
+//
+//		LYCF::iBoss_LYCF::ibsaction_eval = false;
+//	}
+//}
 // Block Dialog
 void LYCF::Display::Prompt(const char* Text, bool* close)
 {
@@ -281,7 +310,7 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.20, 0.35, 0.35, 0.0));
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
 
-		if (settings::dialog == 1) // iBoss Action Dialog
+		if (settings::dialog == 1) // iBoss Action Dialog (BLOCK = ENABLE / ENABLE = BLOCK)
 		{
 
 			ImGui::SetCursorPos(ImVec2((420.0f / 2) - 50.0f, (250.0f / 2) - 80.0f));
@@ -302,6 +331,7 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 
 			cs_ProgressBar(ImGui::GetTime() * -0.50f, ImVec2(260.0f, 45.0f), val.c_str(), ImVec4(0.20, 0.35, 0.35, 1.0)); // 0.31f, 0.78f, 0.47f, 1.0f
 
+
 			ImGui::PopStyleVar(2);
 			ImGui::PopStyleColor();
 
@@ -315,8 +345,19 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 
 			ImGui::PopStyleColor(3);
 			ImGui::PopStyleVar(2);
+
+			//run_test();
+
+			if (LYCF::iBoss_LYCF::exec_eval)
+			{
+				std::thread t(LYCF::iBoss_LYCF::ibsa_action_eval);
+				t.detach();
+
+				LYCF::iBoss_LYCF::exec_eval = false;
+			}
+
 		}
-		else if (settings::dialog == 2)
+		else if (settings::dialog == 2) // iBoss not Found....
 		{
 			static bool run = true;
 			if (run)
@@ -325,20 +366,22 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 				run = false;
 			}
 
+
 			//ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 125.5f, 70.5f));
 			ImGui::SetCursorPos(ImVec2((420.0f / 2) - 48.0f, (250.0f / 2) - 78.0f));
 			ImGui::Image((void*)(intptr_t)LYCF::Display::error, ImVec2(96.0f, 96.0f));
 
-			ImGui::PushStyleColor(, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+			
+			ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 6);
 
-			ImGui::SetCursorPos(ImVec2((420.0f / 2) - 48.0f, (250.0f / 2) - 78.0f));
-			ImGui::BeginChild("err_ibs", ImVec2(120.0f, 50.0));
-			ImGui::Text("iBoss was Not Found, Please try again later...");
+			ImGui::SetCursorPos(ImVec2((420.0f / 2) - 170.0f, (250.0f / 2) + 40.0f));
+			ImGui::BeginChild("err_ibs", ImVec2(340.0f, 50.0f), true);
+
+			ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x + 17.0f, ImGui::GetCursorPos().y + 6.0f));
+			ImGui::Text("iBoss was Not Found, Try Again Later...");
+
 			ImGui::EndChild();
-
-			ImGui::PopStyleColor();
-
-			ImGui::SetCursorPos(ImVec2(45.0f, 180.0f));
+			ImGui::PopStyleVar();
 
 		}
 
@@ -381,7 +424,6 @@ void LYCF::Display::Prompt(const char* Text, bool* close)
 	}
 	ImGui::PopStyleVar();
 }
-
 
 void style::MainWindow()
 {
@@ -427,6 +469,7 @@ void LYCF::Display::caption()
 		bool minz_ret = LoadTextureFromFile("icons//Minimize.png", &LYCF::Display::minz, &minz_width, &minz_height);
 
 		bool error_ret = LoadTextureFromFile("icons//error.png", &LYCF::Display::error, &error_width, &error_height);
+ 
 
 		LYCF::Display::LoadIcons = false;
 	}
@@ -477,7 +520,6 @@ void LYCF::Display::caption()
 bool LYCF::EN_LYCF::check_settings;
 bool LYCF::EN_LYCF::check_cmd;
 bool LYCF::EN_LYCF::check_TManager;
-
 
 
 // iBoss Bool...
@@ -707,8 +749,8 @@ void style::render()
 			if (LYCF::iBoss_LYCF::iBossBlockDialog)
 				LYCF::Display::Prompt("Hellow WOrld", &LYCF::iBoss_LYCF::iBossBlockDialog);
 			
-			if (LYCF::iBoss_LYCF::iBossLoginpg)
-				LYCF::Display::Prompt("If you Get an Error Please Try again later..", &LYCF::iBoss_LYCF::iBossLoginpg);
+			//if (LYCF::iBoss_LYCF::iBossLoginpg)
+			//	LYCF::Display::Prompt("If you Get an Error Please Try again later..", &LYCF::iBoss_LYCF::iBossLoginpg);
 
 
 			const char* value = LYCF::iBoss_LYCF::ibs_stat ? "Active (Running)" : "Dead (Not Running)";
@@ -748,17 +790,19 @@ void style::render()
 			{
 				//LYCF::Display::Prompt();
 				//Prompt = true;
-				LYCF::iBoss_LYCF::iboss_action();
+				LYCF::iBoss_LYCF::DoesiBossExist();
+
+				if (LYCF::iBoss_LYCF::Exist) 
+				{
+					LYCF::iBoss_LYCF::iboss_action(); // iBoss Action....
+				}
+
 				LYCF::iBoss_LYCF::iBossBlockDialog = true;
 				
 				LYCF::iBoss_LYCF::Exist ? settings::dialog = 1 : settings::dialog = 2;
 					
 
 				//LYCF::Display::Prompt = true;
-			}
-			if (ImGui::IsItemClicked())
-			{
-				LYCF::iBoss_LYCF::iboss_action();
 			}
 			if (ImGui::IsItemHovered())
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);

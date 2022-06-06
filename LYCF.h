@@ -63,14 +63,24 @@ namespace LYCF {
 		static bool iBossLoginpg;
 		static bool ibsapopup_exit;
 		static bool ibsaclosex;
+		static bool ibsaction_eval;
 
+		static bool ibsa_start_active;
+		static bool ibsa_stop_active;
 
+		static bool exec_eval;
 
+		// Handles
+		static DWORD ibsastat_dwrd;
 
+		// Functions...
 		static void iboss_status();
 		static void iboss_action();
 		static void DoesiBossExist();
+
 		static void ibsa_autocheck();
+		static void ibsa_action_eval();
+
 		static std::string ibs_stat_log_class;
 
 	};
