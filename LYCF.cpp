@@ -314,13 +314,57 @@ void ibsa_stat_eval(const boost::system::error_code&)
 
 
 
-    if (QueryServiceStatus(ibs_evalhdl, &ibseval_ret))
+    if (!QueryServiceStatus(ibs_evalhdl, &ibseval_ret))
     {
-        LYCF::iBoss_LYCF::ibsastat_dwrd = ibseval_ret.dwCurrentState;
-    }
-    else {
         goto eval_cleanup;
     }
+    else {
+        LYCF::iBoss_LYCF::ibsastat_dwrd = ibseval_ret.dwCurrentState;
+
+
+        //if (ibseval_ret.dwCurrentState != SERVICE_RUNNING || SERVICE_STOPPED)
+        //{
+        //    LYCF::iBoss_LYCF::exec_eval = true;
+        //}
+        //else if (ibseval_ret.dwCurrentState != SERVICE_STOP_PENDING || SERVICE_START_PENDING)
+        //{
+        //    LYCF::iBoss_LYCF::exec_eval = false;
+        //    LYCF::iBoss_LYCF::iBossBlockDialog = false;
+        //    settings::dialog = 0;
+        //    LYCF::iBoss_LYCF::iboss_status();
+        //
+        //}
+
+    }
+
+    if (ibseval_ret.dwCurrentState == SERVICE_STOPPED && LYCF::iBoss_LYCF::ibsa_stop_active)
+    {
+        LYCF::iBoss_LYCF::exec_eval = false;
+        LYCF::iBoss_LYCF::iBossBlockDialog = false;
+        settings::dialog = 0;
+        LYCF::iBoss_LYCF::iboss_status();
+
+        LYCF::iBoss_LYCF::ibsa_stop_active = false;
+    }
+    else if (ibseval_ret.dwCurrentState == SERVICE_RUNNING && LYCF::iBoss_LYCF::ibsa_start_active)
+    {
+        LYCF::iBoss_LYCF::exec_eval = false;
+        LYCF::iBoss_LYCF::iBossBlockDialog = false;
+        settings::dialog = 0;
+        LYCF::iBoss_LYCF::iboss_status();
+
+        LYCF::iBoss_LYCF::ibsa_start_active = false;
+    }
+    else if (ibseval_ret.dwCurrentState == SERVICE_STOP_PENDING && LYCF::iBoss_LYCF::ibsa_stop_active /* && LYCF::iBoss_LYCF::ibsa_stop_active || LYCF::iBoss_LYCF::ibsa_start_active*/)
+    {
+        LYCF::iBoss_LYCF::exec_eval = true;
+
+    }
+    else if (ibseval_ret.dwCurrentState == SERVICE_START_PENDING && LYCF::iBoss_LYCF::ibsa_start_active)
+    {
+        LYCF::iBoss_LYCF::exec_eval = true;
+    }
+
 
 eval_cleanup: 
     {
@@ -387,13 +431,16 @@ void ibsa_eval_set_val()
     if (LYCF::iBoss_LYCF::ibsastat_dwrd == SERVICE_STOP_PENDING || SERVICE_START_PENDING && LYCF::iBoss_LYCF::ibsa_stop_active || LYCF::iBoss_LYCF::ibsa_start_active)
     {
         LYCF::iBoss_LYCF::exec_eval = true;
+
     }
 
     if (LYCF::iBoss_LYCF::ibsastat_dwrd == SERVICE_STOPPED || SERVICE_RUNNING && LYCF::iBoss_LYCF::ibsa_stop_active || LYCF::iBoss_LYCF::ibsa_start_active)
     {
         LYCF::iBoss_LYCF::exec_eval = false;
         LYCF::iBoss_LYCF::iBossBlockDialog = false;
+        settings::dialog = 0;
         LYCF::iBoss_LYCF::iboss_status();
+
     }
 
 }
@@ -407,7 +454,7 @@ void LYCF::iBoss_LYCF::ibsa_action_eval()
 
     io.run();
 
-    ibsa_eval_set_val();
+   // ibsa_eval_set_val(); // Set Value based on return...
     LYCF::iBoss_LYCF::exec_eval = true;
 }
 
