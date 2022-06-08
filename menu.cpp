@@ -40,7 +40,7 @@
 void style::load_font()
 {
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-
+	
 	io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\bahnschrift.ttf", 20.0f);
 
 }
@@ -700,17 +700,24 @@ void style::render()
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
 			//ImGui::Checkbox(" ", &LYCF::EN_LYCF::check_cmd);
 			LYCF::Display::ToggleButton("chck_cmd", &LYCF::EN_LYCF::check_cmd);
+			//if (ImGui::IsItemClicked())
+			//{
+			//	LYCF::EN_LYCF::SetDword_CMDReg_CheckBased(LYCF::EN_LYCF::check_cmd);
+			//}
 			if (ImGui::IsItemHovered())
+			{
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+			}
+
 			ImGui::PopStyleVar();
 			ImGui::EndChild();
 			ImGui::PopStyleColor();
 
 			// Set CMD reg
 
-			LYCF::EN_LYCF::SetDword_CMDReg_CheckBased(LYCF::EN_LYCF::check_cmd);
+			 LYCF::EN_LYCF::SetDword_CMDReg_CheckBased(LYCF::EN_LYCF::check_cmd);
 
-			// TaskManager Option
+			// TaskManager Option...
 
 			ImGui::PushStyleColor(ImGuiCol_Border, LYCF::EN_LYCF::check_TManager ? ImVec4(0.31f, 0.78f, 0.47f, 0.5f) : ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
 
@@ -805,7 +812,15 @@ void style::render()
 				//LYCF::Display::Prompt = true;
 			}
 			if (ImGui::IsItemHovered())
+			{
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+
+				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.25, 0.26, 0.27, 1.0f));
+				ImGui::SetTooltip(LYCF::iBoss_LYCF::ibs_stat ? "Click to Block iBoss" : "Click to Enable iBoss");
+				ImGui::PopStyleColor();
+
+			}
+
 			ImGui::PopStyleVar(2);
 			ImGui::PopStyleColor(4);
 

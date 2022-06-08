@@ -65,13 +65,13 @@ namespace LYCF {
 		static bool ibsaclosex;
 		static bool ibsaction_eval;
 
+		static bool check_ibsa_pb;
+
 		static bool ibsa_start_active;
 		static bool ibsa_stop_active;
 
 		static bool exec_eval;
 
-		// Handles
-		static DWORD ibsastat_dwrd;
 
 		// Functions...
 		static void iboss_status();

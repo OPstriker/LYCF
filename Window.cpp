@@ -194,10 +194,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
               ImGui::SetWindowSize(ImVec2(850.0f, 550.0f), 0); // 850, 550
               ImGui::SetWindowPos(ImVec2(0.0f, 0.0f));
 
-             // ImGui::ShowDemoWindow(0);
-
-
-
+              //ImGui::ShowDemoWindow(0);
               style::render();
 
 
