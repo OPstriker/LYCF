@@ -1,7 +1,6 @@
 ﻿#define IMGUI_DEFINE_MATH_OPERATORS
 
 
-
 #include "style.h"
 #include <imgui/imgui.h>
 #include <imgui/imguipp.h>
@@ -20,6 +19,7 @@
 //#include <boost/bind/bind.hpp>
 //#include <boost/date_time/posix_time/posix_time.hpp>
 #include "LYCF.h"
+#include "style.h"
 
 
 //#include <stdlib.h>
@@ -36,12 +36,39 @@
 #include <future>
 
 
+#include <imgui/imgui_freetype.h>
+
+
+ImFont* style::bahnschrift_16px;
+ImFont* style::bahnschrift_32px;
+
+ImFont* style::emoji_32px;
 
 void style::load_font()
 {
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	
-	io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\bahnschrift.ttf", 20.0f);
+	io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\bahnschrift.ttf", 17.0f);
+	{
+		static ImWchar ranges[] = { 0x1, 0x1FFFF, 0 };
+		static ImFontConfig cfg;
+		cfg.OversampleH = cfg.OversampleV = 1;
+		cfg.MergeMode = true;
+		cfg.FontBuilderFlags |= ImGuiFreeTypeBuilderFlags_LoadColor;
+		style::emoji_32px = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\seguiemj.ttf", 28.0f, &cfg, ranges);
+	}
+
+	style::bahnschrift_16px = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\bahnschrift.ttf", 16.0f);
+
+	style::bahnschrift_32px = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\bahnschrift.ttf", 88.0f);
+
+	static ImWchar ranges[] = { 0x1, 0x1FFFF, 0 };
+	static ImFontConfig cfg;
+	cfg.OversampleH = cfg.OversampleV = 1;
+	cfg.MergeMode = true;
+	cfg.FontBuilderFlags |= ImGuiFreeTypeBuilderFlags_LoadColor;
+	style::emoji_32px = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\seguiemj.ttf", 32.0f, &cfg, ranges);
+
 
 }
 
@@ -526,7 +553,9 @@ bool LYCF::EN_LYCF::check_TManager;
 
 bool LYCF::iBoss_LYCF::ibs_stat;
 bool LYCF::iBoss_LYCF::iBossBlockDialog;
-bool LYCF::iBoss_LYCF::iboss_persist;
+
+bool LYCF::iBoss_LYCF::iboss_persis;
+
 bool LYCF::iBoss_LYCF::iBossLoginpg;
 bool LYCF::iBoss_LYCF::Exist;
 
@@ -574,13 +603,14 @@ void style::render()
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, settings::tab == ENABLE ? HoveredInActive : Hovered);
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, settings::tab == ENABLE ? Active : Hovered);
 		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == ENABLE ? Text : TextInactive);
-		if (ImGui::Button("Enable", ImVec2(250 - 16.3, 60)))
+		if (ImGui::Button("Enable", ImVec2(250 - 16.3f, 60)))
 			settings::tab = 1;
 		if (ImGui::IsItemHovered()) {
 			ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 			if (settings::tab == 1)
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
 		}
+
 		//ImGui::PopStyleColor(3);
 
 		static auto IBOSS = 2; // iBoss...
@@ -636,6 +666,14 @@ void style::render()
 		}
 		//ImGui::PopStyleColor(3);
 
+		// ICONS
+
+		/*ENABLE*/
+		ImGui::SetCursorPos(ImVec2(20.0f, 36.0f));
+		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == ENABLE ? Text : TextInactive);
+		ImGui::Text("\xE2\x9C\x85");
+		ImGui::PopStyleColor();
+
 
 		ImGui::SetCursorPos(ImVec2(42.5f, ImGui::GetWindowHeight() - 45.2));
 		ImGui::TextColored(ImVec4(0.83f, 0.66f, 0.69f, 1.0f), "Use At Your Own Risk"); // Let Your Computer Free!
@@ -643,8 +681,7 @@ void style::render()
 		ImGui::PopStyleColor(18);
 
 
-
-		ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 10);
+		//ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 10);
 
 
 		ImGui::PopStyleVar(); // Pop-Rounding...
@@ -670,7 +707,7 @@ void style::render()
 			// Settings Option
 
 			ImGui::BeginChild("Settings", ImVec2(ImGui::GetWindowWidth() - 285, 60), true);
-			ImGui::SetCursorPos(ImVec2(20, 20));
+			ImGui::SetCursorPos(ImVec2(20, 22));
 			ImGui::Text("Settings & Control Panel");
 			ImGui::SameLine();
 			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 66.0, 15.0));
@@ -693,7 +730,7 @@ void style::render()
 
 			ImGui::Spacing();
 			ImGui::BeginChild("CMD", ImVec2(ImGui::GetWindowWidth() - 285, 60), true);
-			ImGui::SetCursorPos(ImVec2(20, 20));
+			ImGui::SetCursorPos(ImVec2(20, 22));
 			ImGui::Text("CMD");
 			ImGui::SameLine();
 			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 66.0, 15.0));
@@ -723,10 +760,10 @@ void style::render()
 
 			ImGui::Spacing();
 			ImGui::BeginChild("TaskManager", ImVec2(ImGui::GetWindowWidth() - 285, 60), true);
-			ImGui::SetCursorPos(ImVec2(20, 20));
+			ImGui::SetCursorPos(ImVec2(20, 22));
 			ImGui::Text("TaskManager");
 			ImGui::SameLine();
-			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 66, 15.0));
+			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 66.0f, 15.0f));
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
 			//ImGui::Checkbox(" ", &LYCF::EN_LYCF::check_TManager);
 			LYCF::Display::ToggleButton("chck_tmgn", &LYCF::EN_LYCF::check_TManager);
@@ -768,7 +805,7 @@ void style::render()
 			// iBoss Status Indicator...
 			ImGui::SetCursorPos(ImVec2(360.0f, -7.0f));
 			ImGui::BeginChild("iBoss", ImVec2(295.0f, 50.0f), true);
-			ImGui::SetCursorPos(ImVec2(21.5f, 17.0f));
+			ImGui::SetCursorPos(ImVec2(21.5f, 19.0f));
 			ImGui::Text("iBoss Status:");
 			ImGui::SameLine();
 			ImGui::TextColored(LYCF::iBoss_LYCF::ibs_stat ? ImVec4(0.86f, 0.08f, 0.24f, 1.0f) : ImVec4(0.31f, 0.78f, 0.47f, 1.0f), value); // Green : 0.31f, 0.78f, 0.47f, 1.0f, Red : 0.86f, 0.08f, 0.24f, 1.0f
@@ -779,7 +816,7 @@ void style::render()
 			ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
 			ImGui::SetCursorPosY(90.0f);
 			ImGui::BeginChild("iBoss-Block", ImVec2(ImGui::GetWindowWidth() - 285, 60), true); // iBoss-Block start...
-			ImGui::SetCursorPos(ImVec2(10.0f, 20.0f));
+			ImGui::SetCursorPos(ImVec2(10.0f, 22.0f));
 			ImGui::Text("iBoss");
 			ImGui::SameLine();
 			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 160, 13.0f));
@@ -815,9 +852,11 @@ void style::render()
 			{
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
+				ImGui::PushFont(style::bahnschrift_16px);
 				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.25, 0.26, 0.27, 1.0f));
 				ImGui::SetTooltip(LYCF::iBoss_LYCF::ibs_stat ? "Click to Block iBoss" : "Click to Enable iBoss");
 				ImGui::PopStyleColor();
+				ImGui::PopFont();
 
 			}
 
@@ -831,7 +870,7 @@ void style::render()
 
 			ImGui::Spacing();
 			ImGui::BeginChild("iBoss Login", ImVec2(ImGui::GetWindowWidth() - 285.0f, 60.0f), false);
-			ImGui::SetCursorPos(ImVec2(10.0f, 20.0f));
+			ImGui::SetCursorPos(ImVec2(10.0f, 22.0f));
 			ImGui::Text("iBoss Login (BYOD)");
 			ImGui::SameLine();
 
@@ -863,20 +902,24 @@ void style::render()
 
 			// iBoss Persist
 			ImGui::Spacing();
-			ImGui::PushStyleColor(ImGuiCol_Border, LYCF::iBoss_LYCF::iboss_persist ? ImVec4(0.31f, 0.78f, 0.47f, 0.5f) : ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
+			ImGui::PushStyleColor(ImGuiCol_Border, LYCF::iBoss_LYCF::iboss_persis ? ImVec4(0.31f, 0.78f, 0.47f, 0.5f) : ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
 			ImGui::BeginChild("iBoss-Persist)", ImVec2(ImGui::GetWindowWidth() - 285.0f, 60.0f), true); // iBoss - Persis Begin...
-			ImGui::SetCursorPos(ImVec2(10.0f, 20.0f));
+			ImGui::SetCursorPos(ImVec2(10.0f, 22.0f));
 			ImGui::Text("Persistent Block (optional)");
 			ImGui::SameLine();
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
 			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 65, 15.0));
 			//ImGui::Checkbox(" ", &LYCF::iBoss_LYCF::iboss_persist);
-			LYCF::Display::ToggleButton("btn", &LYCF::iBoss_LYCF::iboss_persist);
+			LYCF::Display::ToggleButton("ibs_per", &LYCF::iBoss_LYCF::iboss_persis);
 			if (ImGui::IsItemHovered())
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 			ImGui::PopStyleColor();
 			ImGui::PopStyleVar();
 			ImGui::EndChild(); //iBoss - Persis End...
+
+			// Set Reg
+
+			LYCF::iBoss_LYCF::SetDword_ibsapersis_Checkbased(LYCF::iBoss_LYCF::iboss_persis);
 
 			//ToggleButton("btn", &LYCF::iBoss_LYCF::iboss_persist);
 
@@ -923,7 +966,7 @@ void style::render()
 			ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 6);
 			ImGui::BeginChild("VPN-STAT", ImVec2(195.0f, 50.0f));
 
-			ImGui::SetCursorPos(LYCF::VPN_LYCF::vpnstat ? ImVec2(50.0f, 14.0f) : ImVec2(39.0f, 14.0f));
+			ImGui::SetCursorPos(LYCF::VPN_LYCF::vpnstat ? ImVec2(50.0f, 17.0f) : ImVec2(39.0f, 17.0f));
 			ImGui::TextColored(LYCF::VPN_LYCF::vpnstat ? ImVec4(0.31f, 0.78f, 0.47f, 1.0f) : ImVec4(0.86f, 0.08f, 0.24f, 1.0f), LYCF::VPN_LYCF::vpnstat ? "CONNECTED" : "DISCONNECTED");
 
 			ImGui::EndChild();
@@ -955,38 +998,38 @@ void style::render()
 
 		if (settings::tab == 4) // About
 		{
-			ImGui::SetCursorPosX(250);
-			ImGui::BeginChild("Frame");
+			float float_div_y(150.0f);
 
-			//ImGui::Button("test");
-			ImGui::BeginChild("About");
+			ImGui::SetCursorPos(ImVec2(310.0f, 45.0f));
 
-			ImGui::SetCursorPos(ImVec2(250.0f, 250.0f));
-			ImGui::Text("About");
+			ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 28);
+			ImGui::BeginChild("abt", ImVec2(550.0f, ImGui::GetWindowHeight() - 23.0f), 1);
 
-			static bool idk;
+			ImGui::PushFont(style::bahnschrift_32px);
 
+			ImGui::Text("LYCF");
 
+			ImGui::PushFont(style::emoji_32px);
+			ImGui::Text("\xE2\x9D\xA4 \xE2\x9C\x85 \xE2\x9D\x8C");
+			ImGui::PopFont();
 
-			ImGui::Checkbox(" ", &idk);
+			ImGui::PopFont();
 
-			ImGui::SetCursorPosX(ImGui::GetColumnOffset() + 50.0f);
-			if (idk) {
-				LoadingIndicatorCircle("Circle", 50.0f, ImVec4(0.85f, 0.85f, 0.85f, 0.2f), ImVec4(0.85f, 0.55f, 0.95f, 0.0f), 8, 10.24f);
-
-				static ImU32 spin_colEN = ImGui::GetColorU32(ImVec4(0.85f, 0.85f, 0.85f, 0.8f));
-
-				ImGui::SetCursorPosX(ImGui::GetColumnOffset() + 100.0f);
-				Spinner("heh", 22.0f, 10, spin_colEN); 
-			}
-
+			ImGui::PopStyleVar();
 
 			ImGui::EndChild();
 
-			ImGui::EndChild();
+			
+			// title Div
+			ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+			ImU32 col_l = ImGui::GetColorU32(ImVec4(1.0f, 1.0f, 1.0f, 0.23f));
+
+			draw_list->AddLine(ImVec2(310.0f, float_div_y), ImVec2(560.0f, float_div_y), col_l, 1.0f);
 		}
 
 		// Caption....
+		//settings::tab = 4;
 
 		ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.10f, 0.13f, 0.14f, 0.0f));
 		//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.10f, 0.13f, 0.14f, 0.0f));

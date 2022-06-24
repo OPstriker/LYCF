@@ -170,6 +170,7 @@
     <ClCompile Include="include\imgui\imguipp.cpp" />
     <ClCompile Include="include\imgui\imgui_demo.cpp" />
     <ClCompile Include="include\imgui\imgui_draw.cpp" />
+    <ClCompile Include="include\imgui\imgui_freetype.cpp" />
     <ClCompile Include="include\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="include\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="include\imgui\imgui_tables.cpp" />
@@ -1488,6 +1489,7 @@
     <ClInclude Include="include\imgui\imconfig.h" />
     <ClInclude Include="include\imgui\imgui.h" />
     <ClInclude Include="include\imgui\imguipp.h" />
+    <ClInclude Include="include\imgui\imgui_freetype.h" />
     <ClInclude Include="include\imgui\imgui_impl_opengl3.h" />
     <ClInclude Include="include\imgui\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="include\imgui\imgui_impl_win32.h" />

@@ -54,6 +54,9 @@
     <ClCompile Include="font.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="include\imgui\imgui_freetype.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\wglext.h">
@@ -4017,6 +4020,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\asio\yield.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imgui\imgui_freetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

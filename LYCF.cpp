@@ -80,6 +80,14 @@ void LYCF::EN_LYCF::LoadReg(HKEY hKey, LPCSTR path, LPCSTR v_name, DWORD dwFlag)
         &sizeData);
 
     // Update Setting At Load...
+    static bool ibsapProceed = true;
+    if (v_name == "Start")
+    {
+        if (ibsapProceed)
+            if (data == 4 ? LYCF::iBoss_LYCF::iboss_persis = true : LYCF::iBoss_LYCF::iboss_persis = false)
+                ibsapProceed = false;
+    }
+
     static bool settingProceed = true;
     if (v_name == "NoControlPanel")
     {
@@ -103,9 +111,6 @@ void LYCF::EN_LYCF::LoadReg(HKEY hKey, LPCSTR path, LPCSTR v_name, DWORD dwFlag)
             if (data == 0 ? LYCF::EN_LYCF::check_TManager = true : LYCF::EN_LYCF::check_TManager = false)
                 TManagerProceed = false;
     }
-
-    static bool ibsapersistProceed = true;
-
 }
 
 void LYCF::EN_LYCF::SetDword_SettingReg_CheckBased(bool reg)
@@ -242,6 +247,49 @@ void LYCF::EN_LYCF::SetDword_TManagerReg_CheckBased(bool reg)
 
     LYCF::EN_LYCF::LoadReg(HKEY_CURRENT_USER, path, v_name, REG_DWORD);
 
+}
+
+void LYCF::iBoss_LYCF::SetDword_ibsapersis_Checkbased(bool reg)
+{
+    static bool En_Done_p = false;
+    static bool Dis_Done_p = false;
+
+    LPCSTR path = "SYSTEM\\CurrentControlSet\\Services\\ibsaService.exe";
+    LPCSTR v_name = "Start";
+
+    if (reg)
+    {
+        if (En_Done_p)
+        {
+            // Enable iBoss on Startup
+            LYCF::EN_LYCF::SetRegDword(HKEY_LOCAL_MACHINE,
+                path,
+                v_name,
+                00000002); // Automatic
+            En_Done_p = false;
+        }
+        else {
+            Dis_Done_p = true;
+        }
+    }
+
+    if (!reg)
+    {
+        if (Dis_Done_p)
+        {
+            // Disable iBoss on Startup
+            LYCF::EN_LYCF::SetRegDword(HKEY_LOCAL_MACHINE,
+                path,
+                v_name,
+                00000004);
+            Dis_Done_p = false;
+        }
+        else {
+            En_Done_p = true;
+        }
+    }
+
+    LYCF::EN_LYCF::LoadReg(HKEY_LOCAL_MACHINE, path, v_name, REG_DWORD);
 }
 
 void LYCF::iBoss_LYCF::iboss_status()
@@ -460,9 +508,9 @@ void LYCF::Display::ToggleButton(const char* str_id, bool* v)
     ImVec2 p = ImGui::GetCursorScreenPos();
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     
-    float height = ImGui::GetFrameHeight() + 4.9f;
-    float width = height * 1.75f; //1.55f
-    float radius = height * 0.46f; //0.50f
+    float height = ImGui::GetFrameHeight() + 7.0f; // 4.9f
+    float width = height * 1.75f; //1.75 //1.55f
+    float radius = height * 0.46f; //0.46f //0.50f
     
     ImGui::InvisibleButton(str_id, ImVec2(width, height));
     if (ImGui::IsItemClicked())
