@@ -60,7 +60,7 @@ void style::load_font()
 
 	style::bahnschrift_16px = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\bahnschrift.ttf", 16.0f);
 
-	style::bahnschrift_32px = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\bahnschrift.ttf", 88.0f);
+	style::bahnschrift_32px = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\bahnschrift.ttf", 65.0f);
 
 	static ImWchar ranges[] = { 0x1, 0x1FFFF, 0 };
 	static ImFontConfig cfg;
@@ -669,11 +669,27 @@ void style::render()
 		// ICONS
 
 		/*ENABLE*/
-		ImGui::SetCursorPos(ImVec2(20.0f, 36.0f));
+		ImGui::SetCursorPos(ImVec2(22.0f, 36.0f));
 		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == ENABLE ? Text : TextInactive);
-		ImGui::Text("\xE2\x9C\x85");
+		ImGui::Text("\xF0\x9F\x94\x93");
 		ImGui::PopStyleColor();
 
+		/*iBoss*/
+		ImGui::SetCursorPos(ImVec2(22.0f, 106.0f));
+		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == IBOSS ? Text : TextInactive);
+		ImGui::Text("\xF0\x9F\x91\xBD");
+		ImGui::PopStyleColor();
+
+		/*VPN*/
+		ImGui::SetCursorPos(ImVec2(22.0f, 173.0f));
+		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == VPN ? Text : TextInactive);
+		ImGui::Text("\xF0\x9F\x8C\x90");
+		ImGui::PopStyleColor();
+		/*About*/
+		ImGui::SetCursorPos(ImVec2(23.0f, 242.0f));
+		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == ABOUT ? Text : TextInactive);
+		ImGui::Text("\xE2\x9D\x94");
+		ImGui::PopStyleColor();
 
 		ImGui::SetCursorPos(ImVec2(42.5f, ImGui::GetWindowHeight() - 45.2));
 		ImGui::TextColored(ImVec4(0.83f, 0.66f, 0.69f, 1.0f), "Use At Your Own Risk"); // Let Your Computer Free!
@@ -681,7 +697,7 @@ void style::render()
 		ImGui::PopStyleColor(18);
 
 
-		//ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 10);
+		ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 10);
 
 
 		ImGui::PopStyleVar(); // Pop-Rounding...
@@ -700,6 +716,7 @@ void style::render()
 		if (settings::tab == 1) // Enable
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 6);
+			ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 1.1f);
 			ImGui::PushStyleColor(ImGuiCol_Border, LYCF::EN_LYCF::check_settings ? ImVec4(0.31f, 0.78f, 0.47f, 0.5f) : ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
 			ImGui::SetCursorPosY(50.0f);
 
@@ -716,7 +733,7 @@ void style::render()
 			LYCF::Display::ToggleButton("chck_stng", &LYCF::EN_LYCF::check_settings);
 			if (ImGui::IsItemHovered())
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
-			ImGui::PopStyleVar();
+			ImGui::PopStyleVar(2);
 			ImGui::EndChild();
 			ImGui::PopStyleColor();
 			
@@ -727,6 +744,7 @@ void style::render()
 			// CMD Option
 			
 			ImGui::PushStyleColor(ImGuiCol_Border, LYCF::EN_LYCF::check_cmd ? ImVec4(0.31f, 0.78f, 0.47f, 0.5f) : ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
+			ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 1.1f);
 
 			ImGui::Spacing();
 			ImGui::BeginChild("CMD", ImVec2(ImGui::GetWindowWidth() - 285, 60), true);
@@ -746,7 +764,7 @@ void style::render()
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 			}
 
-			ImGui::PopStyleVar();
+			ImGui::PopStyleVar(2);
 			ImGui::EndChild();
 			ImGui::PopStyleColor();
 
@@ -757,6 +775,7 @@ void style::render()
 			// TaskManager Option...
 
 			ImGui::PushStyleColor(ImGuiCol_Border, LYCF::EN_LYCF::check_TManager ? ImVec4(0.31f, 0.78f, 0.47f, 0.5f) : ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
+			ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 1.1f);
 
 			ImGui::Spacing();
 			ImGui::BeginChild("TaskManager", ImVec2(ImGui::GetWindowWidth() - 285, 60), true);
@@ -776,7 +795,7 @@ void style::render()
 			// Set TaskManager reg
 			LYCF::EN_LYCF::SetDword_TManagerReg_CheckBased(LYCF::EN_LYCF::check_TManager);
 			
-			ImGui::PopStyleVar();
+			ImGui::PopStyleVar(2);
 			//ImGui::PopStyleColor();
 			
 			//ImGui::ImageButton(path, ImVec2(20.0f, 20.0f));
@@ -802,6 +821,8 @@ void style::render()
 			//ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
 
 			ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 9);
+			ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 1.1f);
+
 			// iBoss Status Indicator...
 			ImGui::SetCursorPos(ImVec2(360.0f, -7.0f));
 			ImGui::BeginChild("iBoss", ImVec2(295.0f, 50.0f), true);
@@ -810,12 +831,12 @@ void style::render()
 			ImGui::SameLine();
 			ImGui::TextColored(LYCF::iBoss_LYCF::ibs_stat ? ImVec4(0.86f, 0.08f, 0.24f, 1.0f) : ImVec4(0.31f, 0.78f, 0.47f, 1.0f), value); // Green : 0.31f, 0.78f, 0.47f, 1.0f, Red : 0.86f, 0.08f, 0.24f, 1.0f
 			ImGui::EndChild();
-
+			ImGui::PopStyleVar();
 
 			// iBoss Options...
 			ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
 			ImGui::SetCursorPosY(90.0f);
-			ImGui::BeginChild("iBoss-Block", ImVec2(ImGui::GetWindowWidth() - 285, 60), true); // iBoss-Block start...
+			ImGui::BeginChild("iBoss-Auto", ImVec2(ImGui::GetWindowWidth() - 285, 60), true); // iBoss-Block start...
 			ImGui::SetCursorPos(ImVec2(10.0f, 22.0f));
 			ImGui::Text("iBoss");
 			ImGui::SameLine();
@@ -1010,7 +1031,7 @@ void style::render()
 			ImGui::Text("LYCF");
 
 			ImGui::PushFont(style::emoji_32px);
-			ImGui::Text("\xE2\x9D\xA4 \xE2\x9C\x85 \xE2\x9D\x8C");
+			ImGui::Text("\xE2\x9D\xA4 \xE2\x9C\x85 \xE2\x9D\x8C \xF0\x9F\x9A\x80");
 			ImGui::PopFont();
 
 			ImGui::PopFont();
