@@ -23,6 +23,7 @@ namespace LYCF {
 
 
 		static bool LoadIcons;
+		static bool isWindowActive;
 
 		static GLuint close;
 		static GLuint minz;

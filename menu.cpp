@@ -11,21 +11,9 @@
 
 
 #include <glad/glad.h>
-//#include "tab.h"
-
-// Boost Lib
-
-//#include <boost/thread/thread.hpp>
-//#include <boost/bind/bind.hpp>
-//#include <boost/date_time/posix_time/posix_time.hpp>
 #include "LYCF.h"
 #include "style.h"
 
-
-//#include <stdlib.h>
-//#include "icons.h"
-//#include "iconcpp.h"
-//#include "IconsFontAwesome4.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -283,32 +271,7 @@ bool LYCF::iBoss_LYCF::ibsaction_eval = false;
 
 bool LYCF::iBoss_LYCF::exec_eval = true;
 
-//void run_test()
-//
-//{
-//	if (LYCF::iBoss_LYCF::ibsaction_eval)
-//	{
-//		std::thread tb(LYCF::iBoss_LYCF::ibsaeval_autocheck);
-//
-//		tb.detach();
-//
-//		if (LYCF::iBoss_LYCF::ibsastat_dwrd == SERVICE_STOPPED)
-//		{
-//			LYCF::iBoss_LYCF::iBossBlockDialog = false;
-//			ImGui::CloseCurrentPopup();
-//			LYCF::iBoss_LYCF::iboss_status();
-//		}
-//		else if (LYCF::iBoss_LYCF::ibsastat_dwrd == SERVICE_RUNNING)
-//		{
-//			LYCF::iBoss_LYCF::iBossBlockDialog = false;
-//			ImGui::CloseCurrentPopup();
-//			LYCF::iBoss_LYCF::iboss_status();
-//		}
-//
-//		LYCF::iBoss_LYCF::ibsaction_eval = false;
-//	}
-//}
-// Block Dialog
+
 void LYCF::Display::Prompt(const char* Text, bool* close)
 {
 
@@ -458,10 +421,6 @@ void style::MainWindow()
 
 	style->WindowBorderSize = 0;
 
-	//style->Colors[ImGuiCol_Button] = ImColor(35, 42, 47, 255);
-	//style->Colors[ImGuiCol_ButtonActive] = ImColor(35, 42, 47, 255);
-	//style->Colors[ImGuiCol_ButtonHovered] = ImColor(35, 42, 47, 255);
-
 	style->Colors[ImGuiCol_Separator] = ImColor(35, 42, 47); //41, 42, 47
 	style->Colors[ImGuiCol_SeparatorActive] = ImColor(35, 42, 47); //41, 42, 47
 	style->Colors[ImGuiCol_SeparatorHovered] = ImColor(35, 42, 47); //41, 42, 47
@@ -489,57 +448,97 @@ void LYCF::Display::caption()
 
 	if (LYCF::Display::LoadIcons)
 	{
-		// Load Icons
-
-		bool close_ret = LoadTextureFromFile("icons//Close.png", &LYCF::Display::close, &close_width, &close_height);
-
-		bool minz_ret = LoadTextureFromFile("icons//Minimize.png", &LYCF::Display::minz, &minz_width, &minz_height);
-
+	//	// Load Icons
+	//
+	//	bool close_ret = LoadTextureFromFile("icons//Close.png", &LYCF::Display::close, &close_width, &close_height);
+	//
+	//	bool minz_ret = LoadTextureFromFile("icons//Minimize.png", &LYCF::Display::minz, &minz_width, &minz_height);
+	//
 		bool error_ret = LoadTextureFromFile("icons//error.png", &LYCF::Display::error, &error_width, &error_height);
- 
-
+ 	//
+	//
 		LYCF::Display::LoadIcons = false;
 	}
+	//
+	//ImGuiStyle* style = &ImGui::GetStyle();
+	//ImGuiIO& io = ImGui::GetIO(); (void)io;
+	//
+	////style->Colors[ImGuiCol_Button] = ImVec4(0.77f, 0.17f, 0.11f, 0.0f); // 35, 42, 47, 255
+	////style->Colors[ImGuiCol_ButtonActive] = ImColor(35, 42, 47, 255);
+	////style->Colors[ImGuiCol_ButtonHovered] = ImColor(35, 42, 47, 255);
+	//
+	//style->Colors[ImGuiCol_ChildBg] = ImColor(0.77f, 0.17f, 0.11f, 0.0f);
+	//
+	//
+	//ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 78, 0.0f));
+	//
+	//// Manually Assing COlors
+	//ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.77f, 0.17f, 0.11f, 0.0f));
+	//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.14f, 0.16f, 0.18f, 1.0f));
+	//ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.14f, 0.16f, 0.18f, 1.0f));
+	//
+	//ImGui::PushID("hide-btn");
+	//if (ImGui::Button(" ", ImVec2(60.0f, 40.0f)))
+	//{
+	//	LYCF::EN_LYCF::WindowClose();
+	//}
+	//ImGui::PopID();
+	//
+	//ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 138.0f, 0.0f));
+	//ImGui::PushID("Minz-btn");
+	//if (ImGui::Button(" ", ImVec2(60.0f, 40.0f)))
+	//{
+	//	LYCF::EN_LYCF::WindowMinimize();
+	//}
+	//ImGui::PopID();
+	//
+	//ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 61.5, 8.5f));
+	//ImGui::ImageButton((void*)(intptr_t)LYCF::Display::close, ImVec2(19.5f, 20.0f));
+	//
+	//ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 121.5, 10.0f));
+	//
+	//ImGui::ImageButton((void*)(intptr_t)LYCF::Display::minz, ImVec2(20.0f, 17.0f));
+	//ImGui::PopStyleColor(3);
 
-	ImGuiStyle* style = &ImGui::GetStyle();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
-	//style->Colors[ImGuiCol_Button] = ImVec4(0.77f, 0.17f, 0.11f, 0.0f); // 35, 42, 47, 255
-	//style->Colors[ImGuiCol_ButtonActive] = ImColor(35, 42, 47, 255);
-	//style->Colors[ImGuiCol_ButtonHovered] = ImColor(35, 42, 47, 255);
+	ImDrawList* drawl = ImGui::GetWindowDrawList();
 
-	style->Colors[ImGuiCol_ChildBg] = ImColor(0.77f, 0.17f, 0.11f, 0.0f);
-
-
-	ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 78, 0.0f));
-
-	// Manually Assing COlors
+	// BUTTON COLORS
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.77f, 0.17f, 0.11f, 0.0f));
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.14f, 0.16f, 0.18f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.14f, 0.16f, 0.18f, 1.0f));
 
-	ImGui::PushID("hide-btn");
-	if (ImGui::Button(" ", ImVec2(60.0f, 40.0f)))
+	// CLOSE BUTTON
+	ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 78, 0.0f));
+	ImGui::PushID("close-btn");
+	if (ImGui::ButtonEx(" ", ImVec2(60.0f, 40.0f)))
 	{
 		LYCF::EN_LYCF::WindowClose();
 	}
 	ImGui::PopID();
 
+	// MIN BUTTON
 	ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 138.0f, 0.0f));
-	ImGui::PushID("Minz-btn");
-	if (ImGui::Button(" ", ImVec2(60.0f, 40.0f)))
+	ImGui::PushID("minz-btn");
+	if (ImGui::ButtonEx(" ", ImVec2(60.0f, 40.0f)))
 	{
 		LYCF::EN_LYCF::WindowMinimize();
 	}
 	ImGui::PopID();
 
-	ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 61.5, 8.5f));
-	ImGui::ImageButton((void*)(intptr_t)LYCF::Display::close, ImVec2(19.5f, 20.0f));
-
-	ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 121.5, 10.0f));
-
-	ImGui::ImageButton((void*)(intptr_t)LYCF::Display::minz, ImVec2(20.0f, 17.0f));
 	ImGui::PopStyleColor(3);
+	// X
+	float col_thic_btn = 1.5;
+	ImU32 col_cls_sym = ImGui::GetColorU32(ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+	
+	drawl->AddLine(ImVec2(795.0f, 14.0f), ImVec2(810.0f, 29.0f), col_cls_sym, col_thic_btn);
+	drawl->AddLine(ImVec2(795.0f, 29.0f), ImVec2(810.0f, 14.0f), col_cls_sym, col_thic_btn);
+
+	// --
+
+	drawl->AddLine(ImVec2(ImGui::GetWindowSize().x - 120.0f, 10.0f), ImVec2(ImGui::GetWindowSize().x - 138.0f, 10.0f), col_cls_sym, 1.0f);
+
+
 }
 
 // Define Bools/Declare Bools...
@@ -1036,17 +1035,28 @@ void style::render()
 
 			ImGui::PopFont();
 
+			
+
 			ImGui::PopStyleVar();
 
 			ImGui::EndChild();
 
 			
 			// title Div
-			ImDrawList* draw_list = ImGui::GetWindowDrawList();
-
+			ImDrawList* draw_list = ImGui::GetWindowDrawList(); 
 			ImU32 col_l = ImGui::GetColorU32(ImVec4(1.0f, 1.0f, 1.0f, 0.23f));
 
 			draw_list->AddLine(ImVec2(310.0f, float_div_y), ImVec2(560.0f, float_div_y), col_l, 1.0f);
+
+
+			// Close Button Example
+			ImU32 col_l_2 = ImGui::GetColorU32(ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+
+			draw_list->AddLine(ImVec2(350.0f, 250.0f), ImVec2(365.0f, 265.0f), col_l_2, 0.5f);
+			draw_list->AddLine(ImVec2(350.0f, 265.0f), ImVec2(365.0f, 250.0f), col_l_2, 0.5f);
+
+			
+
 		}
 
 		// Caption....

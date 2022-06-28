@@ -51,10 +51,12 @@ HWND    g_hwnd;
 PFNWGLSWAPINTERVALEXTPROC       wglSwapIntervalEXT;
 PFNWGLGETSWAPINTERVALEXTPROC    wglGetSwapIntervalEXT;
 
+HWND LYCF_hwnd;
 
 int     g_display_w = 850; // 750
 int     g_display_h = 550; // 450
 
+bool LYCF::Display::isWindowActive;
 
 void CreateGlContext();
 bool SetSwapInterval(int interval); //0 - No Interval, 1 - Sync whit VSYNC, n - n times Sync with VSYNC
@@ -62,7 +64,7 @@ bool WGLExtensionSupported(const char* extension_name);
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 // Aplication Entry
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 
     SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2); // DPI Scalling...
 
@@ -92,11 +94,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // https://stackoverflow.com/a/33531179/17882108
     HANDLE m_singleInstanceMutex = CreateMutex(NULL, TRUE, wc.lpszClassName);
     if (m_singleInstanceMutex == NULL || GetLastError() == ERROR_ALREADY_EXISTS) {
+        LYCF_hwnd = FindWindow(wc.lpszClassName, CLASS_NAME);
         HWND existingApp = FindWindow(wc.lpszClassName, CLASS_NAME); //
         if (existingApp) SetForegroundWindow(existingApp);
         if (existingApp) ShowWindow(existingApp, SW_RESTORE);
         return FALSE;
     }
+
+    // check whether windoe is on top...
 
 
     g_hwnd = CreateWindowEx(
