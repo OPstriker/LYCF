@@ -10,7 +10,6 @@
 #include <iostream>
 
 #include <glad/glad.h>
-#include "stb_image.h"
 #include <string.h>
 
 #include <imgui/imgui.h>

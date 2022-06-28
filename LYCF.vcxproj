@@ -165,7 +165,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="font.cpp" />
+    <ClCompile Include="src\font.cpp" />
     <ClCompile Include="include\imgui\imgui.cpp" />
     <ClCompile Include="include\imgui\imguipp.cpp" />
     <ClCompile Include="include\imgui\imgui_demo.cpp" />
@@ -175,13 +175,13 @@
     <ClCompile Include="include\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="include\imgui\imgui_tables.cpp" />
     <ClCompile Include="include\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="LYCF.cpp" />
+    <ClCompile Include="src\LYCF.cpp" />
     <ClCompile Include="src\glad.c" />
-    <ClCompile Include="menu.cpp" />
-    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="src\menu.cpp" />
+    <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="font.h" />
+    <ClInclude Include="src\font.h" />
     <ClInclude Include="IconsFontAwesome4.h" />
     <ClInclude Include="include\asio.hpp" />
     <ClInclude Include="include\asio\any_io_executor.hpp" />
@@ -1498,17 +1498,14 @@
     <ClInclude Include="include\imgui\imstb_textedit.h" />
     <ClInclude Include="include\imgui\imstb_truetype.h" />
     <ClInclude Include="include\wglext.h" />
-    <ClInclude Include="LYCF.h" />
+    <ClInclude Include="src\LYCF.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="stb_image.h" />
-    <ClInclude Include="style.h" />
-    <ClInclude Include="tab.h" />
+    <ClInclude Include="src\stb_image.h" />
+    <ClInclude Include="src\style.h" />
+    <ClInclude Include="src\tab.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="App.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ovpncli.i" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
