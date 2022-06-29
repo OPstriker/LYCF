@@ -80,7 +80,7 @@
     <ClInclude Include="src\font.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="res\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\asio.hpp">
@@ -4024,7 +4024,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="App.rc">
+    <ResourceCompile Include="res\App.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

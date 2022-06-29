@@ -1502,13 +1502,13 @@
     <ClInclude Include="include\imgui\imstb_truetype.h" />
     <ClInclude Include="include\wglext.h" />
     <ClInclude Include="src\LYCF.h" />
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="res\resource.h" />
     <ClInclude Include="src\stb_image.h" />
     <ClInclude Include="src\style.h" />
     <ClInclude Include="src\tab.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="App.rc" />
+    <ResourceCompile Include="res\App.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
