@@ -1510,6 +1510,9 @@
   <ItemGroup>
     <ResourceCompile Include="res\App.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="res\App.aps" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
