@@ -143,6 +143,10 @@
     <PreBuildEvent>
       <Command>taskkill /f /fi "imagename eq $(TargetFileName)"</Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -167,6 +171,10 @@
     <PreBuildEvent>
       <Command>taskkill /f /fi "imagename eq $(TargetFileName)"</Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\font.cpp" />

@@ -505,7 +505,7 @@ void LYCF::Display::caption()
 
 	// BUTTON COLORS
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.77f, 0.17f, 0.11f, 0.0f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.14f, 0.16f, 0.18f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.14f, 0.16f, 0.18f, 1.0f)); // 
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.14f, 0.16f, 0.18f, 1.0f));
 
 	// CLOSE BUTTON
@@ -531,12 +531,12 @@ void LYCF::Display::caption()
 	float col_thic_btn = 1.5;
 	ImU32 col_cls_sym = ImGui::GetColorU32(ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
 	
-	drawl->AddLine(ImVec2(795.0f, 14.0f), ImVec2(810.0f, 29.0f), col_cls_sym, col_thic_btn);
-	drawl->AddLine(ImVec2(795.0f, 29.0f), ImVec2(810.0f, 14.0f), col_cls_sym, col_thic_btn);
+	drawl->AddLine(ImVec2(795.0f, 15.0f), ImVec2(810.0f, 30.0f), col_cls_sym, col_thic_btn);
+	drawl->AddLine(ImVec2(795.0f, 30.0f), ImVec2(810.0f, 15.0f), col_cls_sym, col_thic_btn);
 
 	// --
-
-	drawl->AddLine(ImVec2(ImGui::GetWindowSize().x - 120.0f, 10.0f), ImVec2(ImGui::GetWindowSize().x - 138.0f, 10.0f), col_cls_sym, 1.0f);
+	// 	drawl->AddLine(ImVec2(ImGui::GetWindowSize().x - 120.0f, 10.0f), ImVec2(ImGui::GetWindowSize().x - 138.0f, 10.0f), col_cls_sym, 1.0f);
+	drawl->AddLine(ImVec2((ImGui::GetWindowSize().x - 120.0f) + 21.0f, 22.0f), ImVec2((ImGui::GetWindowSize().x - 138.0f) + 21.0f, 22.0f), col_cls_sym, 1.0f);
 
 
 }
