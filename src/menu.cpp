@@ -449,57 +449,15 @@ void LYCF::Display::caption()
 	if (LYCF::Display::LoadIcons)
 	{
 	//	// Load Icons
-	//
-	//	bool close_ret = LoadTextureFromFile("icons//Close.png", &LYCF::Display::close, &close_width, &close_height);
-	//
-	//	bool minz_ret = LoadTextureFromFile("icons//Minimize.png", &LYCF::Display::minz, &minz_width, &minz_height);
-	//
-		bool error_ret = LoadTextureFromFile("icons//error.png", &LYCF::Display::error, &error_width, &error_height);
- 	//
-	//
-		LYCF::Display::LoadIcons = false;
-	}
-	//
-	//ImGuiStyle* style = &ImGui::GetStyle();
-	//ImGuiIO& io = ImGui::GetIO(); (void)io;
-	//
-	////style->Colors[ImGuiCol_Button] = ImVec4(0.77f, 0.17f, 0.11f, 0.0f); // 35, 42, 47, 255
-	////style->Colors[ImGuiCol_ButtonActive] = ImColor(35, 42, 47, 255);
-	////style->Colors[ImGuiCol_ButtonHovered] = ImColor(35, 42, 47, 255);
-	//
-	//style->Colors[ImGuiCol_ChildBg] = ImColor(0.77f, 0.17f, 0.11f, 0.0f);
-	//
-	//
-	//ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 78, 0.0f));
-	//
-	//// Manually Assing COlors
-	//ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.77f, 0.17f, 0.11f, 0.0f));
-	//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.14f, 0.16f, 0.18f, 1.0f));
-	//ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.14f, 0.16f, 0.18f, 1.0f));
-	//
-	//ImGui::PushID("hide-btn");
-	//if (ImGui::Button(" ", ImVec2(60.0f, 40.0f)))
-	//{
-	//	LYCF::EN_LYCF::WindowClose();
-	//}
-	//ImGui::PopID();
-	//
-	//ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 138.0f, 0.0f));
-	//ImGui::PushID("Minz-btn");
-	//if (ImGui::Button(" ", ImVec2(60.0f, 40.0f)))
-	//{
-	//	LYCF::EN_LYCF::WindowMinimize();
-	//}
-	//ImGui::PopID();
-	//
-	//ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 61.5, 8.5f));
-	//ImGui::ImageButton((void*)(intptr_t)LYCF::Display::close, ImVec2(19.5f, 20.0f));
-	//
-	//ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 121.5, 10.0f));
-	//
-	//ImGui::ImageButton((void*)(intptr_t)LYCF::Display::minz, ImVec2(20.0f, 17.0f));
-	//ImGui::PopStyleColor(3);
+		static bool error_ret = LoadTextureFromFile("icons//error.png", &LYCF::Display::error, &error_width, &error_height);
 
+		if (!error_ret)
+		{
+			// TODO; make window display icons are not found in direcotry...
+		}
+
+		LYCF::Display::LoadIcons = error_ret ? false : true;
+	}
 
 	ImDrawList* drawl = ImGui::GetWindowDrawList();
 
@@ -528,7 +486,7 @@ void LYCF::Display::caption()
 
 	ImGui::PopStyleColor(3);
 	// X
-	float col_thic_btn = 1.5;
+	float col_thic_btn = 1.0f;
 	ImU32 col_cls_sym = ImGui::GetColorU32(ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
 	
 	drawl->AddLine(ImVec2(795.0f, 15.0f), ImVec2(810.0f, 30.0f), col_cls_sym, col_thic_btn);
@@ -604,11 +562,11 @@ void style::render()
 		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == ENABLE ? Text : TextInactive);
 		if (ImGui::Button("Enable", ImVec2(250 - 16.3f, 60)))
 			settings::tab = 1;
-		if (ImGui::IsItemHovered()) {
-			ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
-			if (settings::tab == 1)
-				ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
-		}
+		//if (ImGui::IsItemHovered()) {
+		//	ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+		//	if (settings::tab == 1)
+		//		ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
+		//}
 
 		//ImGui::PopStyleColor(3);
 
@@ -625,11 +583,11 @@ void style::render()
 			LYCF::iBoss_LYCF::iboss_status(); // iBoss Status Updater...
 			LYCF::iBoss_LYCF::DoesiBossExist();
 		}
-		if (ImGui::IsItemHovered()) {
-			ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
-			if (settings::tab == 2)
-				ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
-		}
+		//if (ImGui::IsItemHovered()) {
+		//	ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+		//	if (settings::tab == 2)
+		//		ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
+		//}
 		//ImGui::PopStyleColor(3);
 
 		static auto VPN = 3; // VPN...
@@ -641,11 +599,11 @@ void style::render()
 		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == VPN ? Text : TextInactive);
 		if (ImGui::Button("VPN", ImVec2(250 - 16.3, 60)))
 			settings::tab = 3;
-		if (ImGui::IsItemHovered()) {
-			ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
-			if (settings::tab == 3)
-				ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
-		}
+		//if (ImGui::IsItemHovered()) {
+		//	ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+		//	if (settings::tab == 3)
+		//		ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
+		//}
 		//ImGui::PopStyleColor(3);
 
 		static auto ABOUT = 4; // About...
@@ -657,12 +615,12 @@ void style::render()
 		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == ABOUT ? Text : TextInactive);
 		if (ImGui::Button("About", ImVec2(250 - 16.3, 60)))
 			settings::tab = 4;
-		if (ImGui::IsItemHovered()) {
-			//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, )
-			ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
-			if (settings::tab == 4)
-				ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
-		}
+		//if (ImGui::IsItemHovered()) {
+		//	//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, )
+		//	ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+		//	if (settings::tab == 4)
+		//		ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
+		//}
 		//ImGui::PopStyleColor(3);
 
 		// ICONS
