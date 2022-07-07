@@ -8,7 +8,7 @@
 #include <imgui/imstb_rectpack.h>
 #include <imgui/imgui_impl_opengl3.h>
 
-
+#include "v0iden.h"
 
 #include <glad/glad.h>
 #include "LYCF.h"
@@ -223,7 +223,7 @@ void LoadingIndicatorCircle(const char* label, const float indicator_radius,
 		auto val1 = 0.0f;
 		auto val2 = std::sin(t * speed - i * degree_offset);
 
-		const auto growth = max(val1, val2);
+		const auto growth = std::max(val1, val2);
 		ImVec4 color;
 		color.x = main_color.x * growth + backdrop_color.x * (1.0f - growth);
 		color.y = main_color.y * growth + backdrop_color.y * (1.0f - growth);
@@ -954,8 +954,8 @@ void style::render()
 			ImGui::SetCursorPos(ImVec2(ImGui::GetColumnOffset() + 215.0f, 200.0f));
 			if (ImGui::Button("Enable VPN", ImVec2(120.0f, 50.0f)))
 			{
-				LYCF::VPN_LYCF::vpnstat = true;
-				LYCF::VPN_LYCF::vpnconnect();
+				std::thread v_c(v0iden::v0iden::v_connect);
+				v_c.detach();
 			}
 			if (ImGui::IsItemHovered())
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
@@ -964,7 +964,8 @@ void style::render()
 			ImGui::SetCursorPos(ImVec2(ImGui::GetColumnOffset() + 215.0f, 260.0f));
 			if (ImGui::Button("Disable VPN", ImVec2(120.0f, 50.0f)))
 			{
-				LYCF::VPN_LYCF::vpnstat = false;
+				std::thread v_d(v0iden::v0iden::v_disconnect);
+				v_d.detach();
 			}
 
 			if (ImGui::IsItemHovered())

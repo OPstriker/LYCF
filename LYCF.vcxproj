@@ -128,7 +128,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;TAP_WIN_COMPONENT_ID=tap0901;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>Default</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
@@ -136,7 +136,7 @@
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;user32.lib;gdi32.lib;uxtheme.lib;libssl.lib;lz4.lib;libcrypto.lib;jsoncpp.lib;Fwpuclnt.lib;Wtsapi32.lib;Iphlpapi.lib;Wininet.lib;Setupapi.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -154,7 +154,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;TAP_WIN_COMPONENT_ID=tap0901;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>Default</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
@@ -162,7 +162,7 @@
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -190,11 +190,16 @@
     <ClCompile Include="src\LYCF.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\menu.cpp" />
+    <ClCompile Include="src\ovpncli.cpp" />
     <ClCompile Include="src\Window.cpp" />
+    <ClCompile Include="src\v0iden.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\boost\bind.hpp" />
+    <ClInclude Include="include\boost\config.hpp" />
+    <ClInclude Include="include\ovpncli.hpp" />
+    <ClInclude Include="include\tap-windows.h" />
     <ClInclude Include="src\font.h" />
-    <ClInclude Include="include\asio.hpp" />
     <ClInclude Include="include\asio\any_io_executor.hpp" />
     <ClInclude Include="include\asio\associated_allocator.hpp" />
     <ClInclude Include="include\asio\associated_cancellation_slot.hpp" />
@@ -1514,6 +1519,7 @@
     <ClInclude Include="src\stb_image.h" />
     <ClInclude Include="src\style.h" />
     <ClInclude Include="src\tab.h" />
+    <ClInclude Include="src\v0iden.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="res\App.rc" />
