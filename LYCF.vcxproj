@@ -177,6 +177,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\imgui\imgui_stdlib.cpp" />
     <ClCompile Include="src\font.cpp" />
     <ClCompile Include="include\imgui\imgui.cpp" />
     <ClCompile Include="include\imgui\imguipp.cpp" />
@@ -197,6 +198,7 @@
   <ItemGroup>
     <ClInclude Include="include\boost\bind.hpp" />
     <ClInclude Include="include\boost\config.hpp" />
+    <ClInclude Include="include\imgui\imgui_stdlib.h" />
     <ClInclude Include="include\ovpncli.hpp" />
     <ClInclude Include="include\tap-windows.h" />
     <ClInclude Include="src\font.h" />

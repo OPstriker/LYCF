@@ -7,6 +7,7 @@
 #include <imgui/imgui_internal.h>
 #include <imgui/imstb_rectpack.h>
 #include <imgui/imgui_impl_opengl3.h>
+#include <imgui/imgui_stdlib.h>
 
 #include "v0iden.h"
 
@@ -520,6 +521,8 @@ bool LYCF::iBoss_LYCF::Exist;
 // VPN bool...
 bool LYCF::VPN_LYCF::vpnstat = false;
 
+std::string v0iden::v0iden::prf_path;
+
 
 void style::render()
 {
@@ -952,24 +955,34 @@ void style::render()
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
 
 			ImGui::SetCursorPos(ImVec2(ImGui::GetColumnOffset() + 215.0f, 200.0f));
-			if (ImGui::Button("Enable VPN", ImVec2(120.0f, 50.0f)))
+			if (ImGui::Button(LYCF::VPN_LYCF::vpnstat ? "Disable VPN" : "Enable VPN", ImVec2(120.0f, 50.0f)))
 			{
-				std::thread v_c(v0iden::v0iden::v_connect);
-				v_c.detach();
+				if (LYCF::VPN_LYCF::vpnstat)
+				{
+					std::thread v_d(v0iden::v0iden::v_disconnect);
+					v_d.detach();
+				}
+				else {
+					std::thread v_c(v0iden::v0iden::v_connect);
+					v_c.detach();
+				}
 			}
 			if (ImGui::IsItemHovered())
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
 
-			ImGui::SetCursorPos(ImVec2(ImGui::GetColumnOffset() + 215.0f, 260.0f));
-			if (ImGui::Button("Disable VPN", ImVec2(120.0f, 50.0f)))
-			{
-				std::thread v_d(v0iden::v0iden::v_disconnect);
-				v_d.detach();
-			}
+			ImGui::InputText("Profile Path", &v0iden::v0iden::prf_path);
 
-			if (ImGui::IsItemHovered())
-				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+			ImGui::Text(v0iden::v0iden::prf_path.c_str());
+			//ImGui::SetCursorPos(ImVec2(ImGui::GetColumnOffset() + 215.0f, 260.0f));
+			//if (ImGui::Button("Disable VPN", ImVec2(120.0f, 50.0f)))
+			//{
+			//	std::thread v_d(v0iden::v0iden::v_disconnect);
+			//	v_d.detach();
+			//}
+			//
+			//if (ImGui::IsItemHovered())
+			//	ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
 			ImGui::PopStyleColor(5);
 			ImGui::PopStyleVar(3);

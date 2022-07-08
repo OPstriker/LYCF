@@ -33,6 +33,7 @@
 #include <openvpn/common/exception.hpp>
 #include <openvpn/common/rc.hpp>
 #include <openvpn/transport/protocol.hpp>
+#include <openvpn/common/arraysize.hpp>
 
 namespace openvpn {
   namespace ClientEvent {

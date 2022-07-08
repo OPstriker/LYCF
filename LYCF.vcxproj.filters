@@ -63,6 +63,9 @@
     <ClCompile Include="src\ovpncli.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="include\imgui\imgui_stdlib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\wglext.h">
@@ -4038,6 +4041,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\boost\config.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imgui\imgui_stdlib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

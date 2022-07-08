@@ -94,7 +94,6 @@ namespace LYCF {
 	public:
 		static bool vpnstat;
 
-		static void vpnconnect();
 
 	};
 
