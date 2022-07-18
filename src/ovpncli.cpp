@@ -116,6 +116,8 @@
 // copyright
 #include <openvpn/legal/copyright.hpp>
 
+#include "LYCF.h"
+
 namespace openvpn {
   namespace ClientAPI {
 
@@ -218,10 +220,16 @@ namespace openvpn {
 	    ev.fatal = event->is_fatal();
 
 	    // save connected event
-	    if (event->id() == ClientEvent::CONNECTED)
-	      last_connected = std::move(event);
-	    else if (event->id() == ClientEvent::DISCONNECTED)
-	      parent->on_disconnect();
+		if (event->id() == ClientEvent::CONNECTED)
+		{
+			last_connected = std::move(event);
+			LYCF::VPN_LYCF::vpnstat = true;
+		}
+		else if (event->id() == ClientEvent::DISCONNECTED)
+		{
+			parent->on_disconnect();
+			LYCF::VPN_LYCF::vpnstat = false;
+		}
 	    parent->event(ev);
 	  }
       }

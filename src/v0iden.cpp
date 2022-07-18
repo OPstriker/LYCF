@@ -10,9 +10,18 @@ class Client : public ClientAPI::OpenVPNClient
 private:
 
 	virtual void event(const ClientAPI::Event& ev) override {
-		std::cout << ev.info;
+		//std::cout << ev.info;
 
-		LYCF::VPN_LYCF::vpnstat = ev.name == "CONNECTED" ? true : false;
+		//LYCF::VPN_LYCF::vpnstat = ev.name == "CONNECTED" ? true : false;
+
+		
+
+		v0iden::v0iden::Server_Pub_IP = connection_info().serverIp;
+		v0iden::v0iden::Server_Name = connection_info().serverHost;
+		v0iden::v0iden::Port = connection_info().serverPort;
+		v0iden::v0iden::VPN_Protocol = connection_info().serverProto;
+		v0iden::v0iden::Tun_intf = connection_info().tunName;
+		
 	}
 
 	virtual void log(const ClientAPI::LogInfo& loginf) override {
@@ -32,14 +41,12 @@ private:
 	virtual bool pause_on_connection_timeout() override {
 		return false;
 	}
-
 };
 
 static Client* the_client = nullptr;
 
 void v0iden::v0iden::v_connect()
 {
-	system("CLS");
 	using namespace openvpn::ClientAPI;
 
 	ClientAPI::Config config;
@@ -54,6 +61,7 @@ void v0iden::v0iden::v_connect()
 	mc = OpenVPNClientHelper::merge_config(v0iden::prf_path, true);
 
 	config.content = mc.profileContent;
+	config.wintun = v0iden::WinTun_;
 
 	Client client;
 
@@ -67,7 +75,6 @@ void v0iden::v0iden::v_connect()
 
 void v0iden::v0iden::v_disconnect()
 {
-	system("CLS");
 	the_client->stop();
 
 }

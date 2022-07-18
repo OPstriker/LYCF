@@ -3,8 +3,6 @@
 
 // Used and Modified by OPstriker
 
-
-
 #include <Windows.h>
 
 //#define WIN32_LEAN_AND_MEAN
@@ -64,9 +62,9 @@ bool WGLExtensionSupported(const char* extension_name);
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 // Aplication Entry
-
+// 
 //int WinMain
-int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
 
     SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2); // DPI Scalling...
 
@@ -76,7 +74,7 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmd
 
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
-    UNREFERENCED_PARAMETER(nCmdShow);
+    UNREFERENCED_PARAMETER(nShowCmd);
 
     WNDCLASSEX wc = { 0 };
     {
@@ -117,7 +115,6 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmd
         hInstance,
         0
     );
-
 
     SetWindowTextA(g_hwnd, "LYCF");
 
@@ -498,7 +495,35 @@ void LYCF::EN_LYCF::WindowMinimize()
     ShowWindow(g_hwnd, SW_MINIMIZE);
 }
 
+bool LYCF::WND::GetFilPath(std::string* path)
+{
 
+    OPENFILENAME ofn;
+    TCHAR szFile[260] = { 0 };       // if using TCHAR macros
+
+    // Initialize OPENFILENAME
+    ZeroMemory(&ofn, sizeof(ofn));
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = g_hwnd;
+    ofn.lpstrFile = szFile;
+    ofn.nMaxFile = sizeof(szFile);
+    ofn.lpstrFilter = _T("OpenVPN Profile (*.ovpn)\0*.ovpn\0");
+    ofn.nFilterIndex = 1;
+    ofn.lpstrFileTitle = NULL;
+    ofn.nMaxFileTitle = 0;
+    ofn.lpstrInitialDir = NULL;
+    ofn.lpstrTitle = "Import OpenVPN Profile";
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_EXPLORER | OFN_HIDEREADONLY;
+
+    if (GetOpenFileNameA(&ofn) == TRUE)
+    {
+        *path = ofn.lpstrFile;
+        return true;
+    }
+    else {
+        return false;
+    }
+}
 
 void CreateGlContext() {
 

@@ -3,6 +3,8 @@
 
 
 #include <Windows.h>
+#include <commdlg.h>
+#include <tchar.h>
 #include <glad/glad.h>
 #include <shellapi.h>
 #include "tab.h"
@@ -10,6 +12,11 @@
 
 namespace LYCF {
 
+	class WND
+	{
+	public:
+		static bool GetFilPath(std::string* path);
+	};
 	class Display
 	{
 	private:

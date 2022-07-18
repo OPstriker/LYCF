@@ -17,6 +17,7 @@
 
 #include <fstream>
 #include <iostream>
+#include "v0iden.h"
 
 
 //#include <openvpn/common/platform.hpp>
@@ -542,3 +543,5 @@ void LYCF::Display::ToggleButton(const char* str_id, bool* v)
     draw_list->AddCircleFilled(ImVec2(p.x + 1.2 + radius + t * (width - radius * 2.15f), p.y + radius + 1.2), radius - 2.0f, toggle_col); //M_COL32(255, 255, 255, 255)
 
 }
+
+

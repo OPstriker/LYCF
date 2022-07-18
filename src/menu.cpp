@@ -24,14 +24,16 @@
 #include <thread>
 #include <future>
 
-
 #include <imgui/imgui_freetype.h>
+
+#include <ShObjIdl_core.h>
 
 
 ImFont* style::bahnschrift_16px;
 ImFont* style::bahnschrift_32px;
 
 ImFont* style::emoji_32px;
+
 
 void style::load_font()
 {
@@ -521,7 +523,19 @@ bool LYCF::iBoss_LYCF::Exist;
 // VPN bool...
 bool LYCF::VPN_LYCF::vpnstat = false;
 
+bool v0iden::v0iden::WinTun_ = false;
+
+bool showprf_path = false;
+
+
+//Connection Info:
+
 std::string v0iden::v0iden::prf_path;
+std::string v0iden::v0iden::Server_Pub_IP;
+std::string v0iden::v0iden::Server_Name;
+std::string v0iden::v0iden::Port;
+std::string v0iden::v0iden::VPN_Protocol;
+std::string v0iden::v0iden::Tun_intf;
 
 
 void style::render()
@@ -966,23 +980,73 @@ void style::render()
 					std::thread v_c(v0iden::v0iden::v_connect);
 					v_c.detach();
 				}
+
 			}
 			if (ImGui::IsItemHovered())
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
+			
 
 			ImGui::InputText("Profile Path", &v0iden::v0iden::prf_path);
 
-			ImGui::Text(v0iden::v0iden::prf_path.c_str());
-			//ImGui::SetCursorPos(ImVec2(ImGui::GetColumnOffset() + 215.0f, 260.0f));
-			//if (ImGui::Button("Disable VPN", ImVec2(120.0f, 50.0f)))
-			//{
-			//	std::thread v_d(v0iden::v0iden::v_disconnect);
-			//	v_d.detach();
-			//}
-			//
-			//if (ImGui::IsItemHovered())
-			//	ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+			ImGui::SameLine();
+			if (ImGui::Button("X", ImVec2(20.0f, 20.0f)))
+			{
+				v0iden::v0iden::prf_path = "";
+			}
+
+
+			if(ImGui::Button("Import Profile", ImVec2(120.0f, 40.0f)))
+			{
+				if (!LYCF::VPN_LYCF::vpnstat)
+				{
+					std::thread imp_prf(LYCF::WND::GetFilPath, &v0iden::v0iden::prf_path);
+					imp_prf.detach();
+				}
+			}
+
+			ImGui::Checkbox("Show Profile Path", &showprf_path);
+
+			if (showprf_path)
+			{
+
+				std::string path_prf("Profile Path: " + v0iden::v0iden::prf_path);
+				ImGui::Text(path_prf.c_str());
+			}
+
+			//ImGui::Text(v0iden::v0iden::prf_path.c_str());
+			ImGui::Spacing();
+
+			if (!LYCF::VPN_LYCF::vpnstat)
+			{
+				LYCF::Display::ToggleButton("WinTun", &v0iden::v0iden::WinTun_);
+				ImGui::SameLine();
+				ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 5.0f);
+				ImGui::Text("WinTun");
+			}
+
+			if (LYCF::VPN_LYCF::vpnstat)
+			{
+
+				ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 20.0f);
+
+				std::string pub_name("Server : " + v0iden::v0iden::Server_Name);
+				ImGui::Text(pub_name.c_str());
+
+
+				std::string pub_ip("Public IP : " + v0iden::v0iden::Server_Pub_IP);
+				ImGui::Text(pub_ip.c_str());
+
+				std::string port("Port : " + v0iden::v0iden::Port);
+				ImGui::Text(port.c_str());
+
+				std::string vpn_prot("VPN Protocol : " + v0iden::v0iden::VPN_Protocol);
+				ImGui::Text(vpn_prot.c_str());
+
+				std::string tun_intf("Tun Driver : " + v0iden::v0iden::Tun_intf);
+				ImGui::Text(tun_intf.c_str());
+
+			}
 
 			ImGui::PopStyleColor(5);
 			ImGui::PopStyleVar(3);
