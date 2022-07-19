@@ -1005,6 +1005,11 @@ void style::render()
 				}
 			}
 
+			if (ImGui::Button("Print IP", ImVec2(120.0f, 40.0f)))
+			{
+				system("CLS & curl ifconfig.me");
+			}
+				
 			ImGui::Checkbox("Show Profile Path", &showprf_path);
 
 			if (showprf_path)

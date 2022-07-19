@@ -162,7 +162,7 @@
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <SubSystem>NotSet</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -199,6 +199,16 @@
     <ClInclude Include="include\boost\bind.hpp" />
     <ClInclude Include="include\boost\config.hpp" />
     <ClInclude Include="include\imgui\imgui_stdlib.h" />
+    <ClInclude Include="include\openvpn\common\json\allocator.h" />
+    <ClInclude Include="include\openvpn\common\json\assertions.h" />
+    <ClInclude Include="include\openvpn\common\json\config.h" />
+    <ClInclude Include="include\openvpn\common\json\forwards.h" />
+    <ClInclude Include="include\openvpn\common\json\json.h" />
+    <ClInclude Include="include\openvpn\common\json\json_features.h" />
+    <ClInclude Include="include\openvpn\common\json\reader.h" />
+    <ClInclude Include="include\openvpn\common\json\value.h" />
+    <ClInclude Include="include\openvpn\common\json\version.h" />
+    <ClInclude Include="include\openvpn\common\json\writer.h" />
     <ClInclude Include="include\ovpncli.hpp" />
     <ClInclude Include="include\tap-windows.h" />
     <ClInclude Include="src\font.h" />
