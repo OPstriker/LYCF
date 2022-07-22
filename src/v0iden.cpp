@@ -26,7 +26,10 @@ private:
 
 	virtual void log(const ClientAPI::LogInfo& loginf) override {
 
+#ifdef _DEBUG
+
 		std::cout << loginf.text;
+#endif
 
 	}
 
@@ -41,40 +44,54 @@ private:
 	virtual bool pause_on_connection_timeout() override {
 		return false;
 	}
+
 };
 
 static Client* the_client = nullptr;
 
-void v0iden::v0iden::v_connect()
+bool v0iden::v0iden::v_connect()
 {
 	using namespace openvpn::ClientAPI;
 
-	ClientAPI::Config config;
+	if (!v0iden::prf_path.empty())
+	{
+		ClientAPI::Config config;
 
-	MergeConfig mc;
+		MergeConfig mc;
 
-	//mc = OpenVPNClientHelper::merge_config("C:\\Users\\skill\\Desktop\\Experiments\\LYCF - DirectX\\LYCF\\Build\\x64\\Release\\profiles\\OPstriker.ovpn", true);
+		//mc = OpenVPNClientHelper::merge_config("C:\\Users\\skill\\Desktop\\Experiments\\LYCF - DirectX\\LYCF\\Build\\x64\\Release\\profiles\\OPstriker.ovpn", true);
 
-	if (v0iden::prf_path.empty())
-		v0iden::prf_path = "OPstriker.ovpn";
+		mc = OpenVPNClientHelper::merge_config(v0iden::prf_path, true);
 
-	mc = OpenVPNClientHelper::merge_config(v0iden::prf_path, true);
+		config.content = mc.profileContent;
+		config.wintun = v0iden::WinTun_;
 
-	config.content = mc.profileContent;
-	config.wintun = v0iden::WinTun_;
+		Client client;
 
-	Client client;
+		the_client = &client;
 
-	the_client = &client;
+		ClientAPI::EvalConfig eval = client.eval_config(config);
 
-	ClientAPI::EvalConfig eval = client.eval_config(config);
+		ClientAPI::Status connect_status = client.connect();
 
-	ClientAPI::Status connect_status = client.connect();
+		if (connect_status.error)
+		{
+			return false;
+		}
+
+		return true;
+
+	}
 
 }
 
-void v0iden::v0iden::v_disconnect()
+bool v0iden::v0iden::v_disconnect()
 {
 	the_client->stop();
 
+	if (LYCF::VPN_LYCF::vpnstat)
+	{
+		return false;
+	}
+	return true;
 }

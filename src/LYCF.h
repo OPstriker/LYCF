@@ -16,6 +16,9 @@ namespace LYCF {
 	{
 	public:
 		static bool GetFilPath(std::string* path);
+		static void cmdl_quit();
+
+		static void start_exec(LPCSTR pName);
 	};
 	class Display
 	{
@@ -101,6 +104,7 @@ namespace LYCF {
 	public:
 		static bool vpnstat;
 
+		static void vpn_disc();
 
 	};
 

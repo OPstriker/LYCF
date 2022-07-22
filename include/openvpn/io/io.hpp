@@ -24,9 +24,9 @@
 #ifndef OPENVPN_IO_IO_H
 #define OPENVPN_IO_IO_H
 
-//#ifdef USE_ASIO
+#ifdef USE_ASIO
 #include <asio.hpp>
 #define openvpn_io asio
-//#endif
+#endif
 
 #endif

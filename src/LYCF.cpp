@@ -544,4 +544,42 @@ void LYCF::Display::ToggleButton(const char* str_id, bool* v)
 
 }
 
+void LYCF::VPN_LYCF::vpn_disc()
+{
+    if (LYCF::VPN_LYCF::vpnstat)
+    {
+        v0iden::v0iden::v_disconnect();
+    }
 
+    while (LYCF::VPN_LYCF::vpnstat)
+    {
+        Sleep(1);
+
+        if (!LYCF::VPN_LYCF::vpnstat)
+            break;
+    }
+}
+
+void LYCF::WND::start_exec(LPCSTR pName)
+{
+    STARTUPINFO si;
+    PROCESS_INFORMATION pi;
+
+    ZeroMemory(&si, sizeof(si));
+    si.cb = sizeof(si);
+    ZeroMemory(&pi, sizeof(pi));
+
+    CreateProcess(pName,
+        NULL,
+        NULL,
+        NULL,
+        FALSE,
+        0,
+        NULL,
+        NULL,
+        &si,
+        &pi
+    );
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+}

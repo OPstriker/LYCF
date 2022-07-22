@@ -30,14 +30,8 @@
 #include <utility>
 #include <atomic>
 
-#define USE_ASIO
-//#define OPENVPN_OVPNCLI_ASYNC_SETUP // FOR OVPN agent
-//#define OPENVPN_COMMAND_AGENT
-//#define HAVE_JSONCPP
-
 #include <openvpn/io/io.hpp>
 
-#define USE_OPENSSL
 //
 
 // Set up export of our public interface unless
@@ -231,6 +225,10 @@ namespace openvpn {
 		else if (event->id() == ClientEvent::DISCONNECTED)
 		{
 			parent->on_disconnect();
+			LYCF::VPN_LYCF::vpnstat = false;
+		}
+		else
+		{
 			LYCF::VPN_LYCF::vpnstat = false;
 		}
 	    parent->event(ev);

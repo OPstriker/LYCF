@@ -27,6 +27,7 @@
 #include <imgui/imgui_freetype.h>
 
 #include <ShObjIdl_core.h>
+#include <shlwapi.h>
 
 
 ImFont* style::bahnschrift_16px;
@@ -623,14 +624,14 @@ void style::render()
 		//}
 		//ImGui::PopStyleColor(3);
 
-		static auto ABOUT = 4; // About...
+		static auto PREF = 4; // About...
 
 		ImGui::Spacing();
-		ImGui::PushStyleColor(ImGuiCol_Button, settings::tab == ABOUT ? Active : InActive);
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, settings::tab == ABOUT ? HoveredInActive : Hovered);
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, settings::tab == ABOUT ? Active : Hovered);
-		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == ABOUT ? Text : TextInactive);
-		if (ImGui::Button("About", ImVec2(250 - 16.3, 60)))
+		ImGui::PushStyleColor(ImGuiCol_Button, settings::tab == PREF ? Active : InActive);
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, settings::tab == PREF ? HoveredInActive : Hovered);
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, settings::tab == PREF ? Active : Hovered);
+		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == PREF ? Text : TextInactive);
+		if (ImGui::Button("Settings", ImVec2(250 - 16.3, 60)))
 			settings::tab = 4;
 		//if (ImGui::IsItemHovered()) {
 		//	//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, )
@@ -660,9 +661,9 @@ void style::render()
 		ImGui::Text("\xF0\x9F\x8C\x90");
 		ImGui::PopStyleColor();
 		/*About*/
-		ImGui::SetCursorPos(ImVec2(23.0f, 242.0f));
-		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == ABOUT ? Text : TextInactive);
-		ImGui::Text("\xE2\x9D\x94");
+		ImGui::SetCursorPos(ImVec2(22.0f, 241.0f));
+		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == PREF ? Text : TextInactive);
+		ImGui::Text("\xe2\x9a\x99");
 		ImGui::PopStyleColor();
 
 		ImGui::SetCursorPos(ImVec2(42.5f, ImGui::GetWindowHeight() - 45.2));
@@ -971,16 +972,25 @@ void style::render()
 			ImGui::SetCursorPos(ImVec2(ImGui::GetColumnOffset() + 215.0f, 200.0f));
 			if (ImGui::Button(LYCF::VPN_LYCF::vpnstat ? "Disable VPN" : "Enable VPN", ImVec2(120.0f, 50.0f)))
 			{
-				if (LYCF::VPN_LYCF::vpnstat)
-				{
-					std::thread v_d(v0iden::v0iden::v_disconnect);
-					v_d.detach();
-				}
-				else {
-					std::thread v_c(v0iden::v0iden::v_connect);
-					v_c.detach();
-				}
 
+				if (v0iden::v0iden::prf_path.empty())
+				{
+					std::thread start_imp_prf(LYCF::WND::GetFilPath, &v0iden::v0iden::prf_path);
+					start_imp_prf.detach();
+				}
+				else 
+				{
+					if (LYCF::VPN_LYCF::vpnstat)
+					{
+						std::thread v_d(v0iden::v0iden::v_disconnect);
+						v_d.detach();
+					}
+					else 
+					{
+						std::thread v_c(v0iden::v0iden::v_connect);
+						v_c.detach();
+					}
+				}
 			}
 			if (ImGui::IsItemHovered())
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
@@ -992,7 +1002,8 @@ void style::render()
 			ImGui::SameLine();
 			if (ImGui::Button("X", ImVec2(20.0f, 20.0f)))
 			{
-				v0iden::v0iden::prf_path = "";
+				if (!LYCF::VPN_LYCF::vpnstat)
+					v0iden::v0iden::prf_path = "";
 			}
 
 
@@ -1005,19 +1016,18 @@ void style::render()
 				}
 			}
 
-			if (ImGui::Button("Print IP", ImVec2(120.0f, 40.0f)))
-			{
-				system("CLS & curl ifconfig.me");
-			}
-				
-			ImGui::Checkbox("Show Profile Path", &showprf_path);
+			//if (ImGui::Button("CLOSE", ImVec2(120.0f, 40.0f)))
+			//{
+			//	LYCF::WND::cmdl_quit();
+			//}
 
-			if (showprf_path)
+#ifdef _DEBUG
+			ImGui::SameLine();
+			if (ImGui::Button("Clear Console", ImVec2(120.0f, 40.0f)))
 			{
-
-				std::string path_prf("Profile Path: " + v0iden::v0iden::prf_path);
-				ImGui::Text(path_prf.c_str());
+				system("CLS");
 			}
+#endif
 
 			//ImGui::Text(v0iden::v0iden::prf_path.c_str());
 			ImGui::Spacing();
@@ -1057,46 +1067,44 @@ void style::render()
 			ImGui::PopStyleVar(3);
 		}
 
-		if (settings::tab == 4) // About
+		if (settings::tab == 4) // Settings
 		{
-			float float_div_y(150.0f);
-
-			ImGui::SetCursorPos(ImVec2(310.0f, 45.0f));
-
-			ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 28);
-			ImGui::BeginChild("abt", ImVec2(550.0f, ImGui::GetWindowHeight() - 23.0f), 1);
-
-			ImGui::PushFont(style::bahnschrift_32px);
-
-			ImGui::Text("LYCF");
 
 			ImGui::PushFont(style::emoji_32px);
-			ImGui::Text("\xE2\x9D\xA4 \xE2\x9C\x85 \xE2\x9D\x8C \xF0\x9F\x9A\x80");
+			ImGui::Text("\xe2\x9d\xa4 \xE2\x9C\x85 \xE2\x9D\x8C \xF0\x9F\x9A\x80");
 			ImGui::PopFont();
 
-			ImGui::PopFont();
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6.0f);
 
-			
+			if (ImGui::Button("Un-Install", ImVec2(157.0f, 72.0f)))
+			{
+				TCHAR szFileName[MAX_PATH];
 
+				if (GetModuleFileName(NULL, szFileName, MAX_PATH))
+				{
+					PathRemoveFileSpec(szFileName);
+
+					std::string fl_nm_dir = szFileName;
+
+					std::string uninstall_path = fl_nm_dir + "\\unins000.exe";
+
+					DWORD file_atr = GetFileAttributes(uninstall_path.c_str());
+
+					if (file_atr != INVALID_FILE_ATTRIBUTES)
+					{
+						LYCF::WND::cmdl_quit();
+						LYCF::WND::start_exec(uninstall_path.c_str());
+						std::cout << uninstall_path + "\n";
+					}
+					else
+					{
+						std::cout << "Could Not Find Uninstall File...\n";
+					}
+
+				}
+				
+			}
 			ImGui::PopStyleVar();
-
-			ImGui::EndChild();
-
-			
-			// title Div
-			ImDrawList* draw_list = ImGui::GetWindowDrawList(); 
-			ImU32 col_l = ImGui::GetColorU32(ImVec4(1.0f, 1.0f, 1.0f, 0.23f));
-
-			draw_list->AddLine(ImVec2(310.0f, float_div_y), ImVec2(560.0f, float_div_y), col_l, 1.0f);
-
-
-			// Close Button Example
-			ImU32 col_l_2 = ImGui::GetColorU32(ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
-
-			draw_list->AddLine(ImVec2(350.0f, 250.0f), ImVec2(365.0f, 265.0f), col_l_2, 0.5f);
-			draw_list->AddLine(ImVec2(350.0f, 265.0f), ImVec2(365.0f, 250.0f), col_l_2, 0.5f);
-
-			
 
 		}
 

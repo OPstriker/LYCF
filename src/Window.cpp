@@ -4,6 +4,7 @@
 // Used and Modified by OPstriker
 
 #include <Windows.h>
+#include <iostream>
 
 //#define WIN32_LEAN_AND_MEAN
 
@@ -35,6 +36,7 @@
 #include <uxtheme.h>
 
 #include <dwmapi.h>
+
 //#include "resource.h"
 
 
@@ -46,10 +48,12 @@
 HGLRC   g_GLRenderContext;
 HDC     g_HDCDeviceContext;
 HWND    g_hwnd;
+NOTIFYICONDATA nid;
 PFNWGLSWAPINTERVALEXTPROC       wglSwapIntervalEXT;
 PFNWGLGETSWAPINTERVALEXTPROC    wglGetSwapIntervalEXT;
 
 HWND LYCF_hwnd;
+HWND ex_hWnd;
 
 int     g_display_w = 850; // 750
 int     g_display_h = 550; // 450
@@ -61,10 +65,18 @@ bool SetSwapInterval(int interval); //0 - No Interval, 1 - Sync whit VSYNC, n - 
 bool WGLExtensionSupported(const char* extension_name);
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+
+
 // Aplication Entry
-// 
+// Set For Console and Windows...
 //int WinMain
-int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
+#ifndef _DEBUG
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd)
+{
+#else
+int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
+{
+#endif
 
     SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2); // DPI Scalling...
 
@@ -98,6 +110,7 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
         HWND existingApp = FindWindow(wc.lpszClassName, CLASS_NAME); //
         if (existingApp) SetForegroundWindow(existingApp);
         if (existingApp) ShowWindow(existingApp, SW_RESTORE);
+        if (existingApp) ShowWindow(existingApp, SW_SHOW);
         return FALSE;
     }
 
@@ -252,13 +265,15 @@ bool NotifyCon = true;
 #define ID_DISPLAY_APP_LYCF 103
 #define ID_LYCF_CLOSE 104
 
+void v_dic_q()
+{
+    LYCF::VPN_LYCF::vpn_disc();
+}
+
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-
-    NOTIFYICONDATA nid;
-
     nid.cbSize = sizeof(NOTIFYICONDATA);
     nid.hWnd = hWnd;
     nid.uID = 100;
@@ -274,7 +289,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     //Custom Frame Expiriment... (Adandoned for Now...)
 
-
+    ex_hWnd = hWnd;
     bool fCallDWP = true;
     BOOL fDwnEnabled = false;
 
@@ -429,6 +444,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 }
             }
             else if (id == ID_LYCF_CLOSE) {
+                v_dic_q();
                 NotifyCon = false;
                 Shell_NotifyIcon(NIM_DELETE, &nid);
                 PostMessage(hWnd, WM_QUIT, 0, 0);
@@ -477,6 +493,16 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 void LYCF::EN_LYCF::WindowMove()
 {
     
+}
+
+void LYCF::WND::cmdl_quit()
+{
+
+    v_dic_q();
+    NotifyCon = false;
+    Shell_NotifyIcon(NIM_DELETE, &nid);
+    PostMessage(g_hwnd, WM_DESTROY, 0, 0);
+
 }
 
 void LYCF::EN_LYCF::WindowClose()

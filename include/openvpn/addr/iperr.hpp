@@ -25,7 +25,6 @@
 
 #include <string>
 
-#define USE_ASIO
 #include <openvpn/io/io.hpp>
 
 #ifndef OPENVPN_LEGACY_TITLE_ABSTRACTION
