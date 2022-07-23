@@ -4085,5 +4085,6 @@
   <ItemGroup>
     <None Include="res\App.aps" />
     <None Include="cpp.hint" />
+    <None Include="vcpkg.json" />
   </ItemGroup>
 </Project>

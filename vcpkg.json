@@ -1,0 +1,14 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
+  "name": "lycf",
+  "version-string": "1.1.3dev",
+  "dependencies": [
+    "lz4",
+    "jsoncpp",
+    "asio",
+    "openssl",
+    "tap-windows6",
+    "boost-asio",
+    "freetype"
+  ]
+}
