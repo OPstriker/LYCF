@@ -42,10 +42,10 @@
     <ClCompile Include="include\imgui\imgui_draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\imgui\imgui_impl_opengl3.cpp">
+    <ClCompile Include="include\imgui\backends\imgui_impl_opengl3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\imgui\imgui_impl_win32.cpp">
+    <ClCompile Include="include\imgui\backends\imgui_impl_win32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\imgui\imgui_tables.cpp">
@@ -4004,13 +4004,13 @@
     <ClInclude Include="include\imgui\imgui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\imgui\imgui_impl_opengl3.h">
+    <ClInclude Include="include\imgui\backends\imgui_impl_opengl3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\imgui\imgui_impl_opengl3_loader.h">
+    <ClInclude Include="include\imgui\backends\imgui_impl_opengl3_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\imgui\imgui_impl_win32.h">
+    <ClInclude Include="include\imgui\backends\imgui_impl_win32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\imgui\imgui_internal.h">
@@ -4048,7 +4048,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\App.aps" />
-    <None Include="cpp.hint" />
     <None Include="vcpkg.json" />
   </ItemGroup>
 </Project>

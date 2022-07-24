@@ -12,8 +12,8 @@
 #include <Uxtheme.h>
 #include <iostream>
 #include <imgui/imgui.h>
-#include <imgui/imgui_impl_win32.h>
-#include <imgui/imgui_impl_opengl3.h>
+#include <imgui/backends/imgui_impl_win32.h>
+#include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/imgui_internal.h>
 
 #include <stdbool.h>
