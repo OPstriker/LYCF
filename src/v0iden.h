@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ovpncli.hpp>
+#include <openvpn/ovpncli.hpp>
 
 #include "LYCF.h"
 

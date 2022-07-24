@@ -12,7 +12,7 @@ private:
 	virtual void event(const ClientAPI::Event& ev) override {
 		//std::cout << ev.info;
 
-		//LYCF::VPN_LYCF::vpnstat = ev.name == "CONNECTED" ? true : false;
+		LYCF::VPN_LYCF::vpnstat = ev.name == "CONNECTED" ? true : false;
 
 		
 

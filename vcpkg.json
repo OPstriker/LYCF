@@ -9,6 +9,7 @@
     "openssl",
     "tap-windows6",
     "boost-asio",
-    "freetype"
+    "freetype",
+    "openvpn3"
   ]
 }

@@ -22,7 +22,8 @@
 // Implementation file for OpenVPNClient API defined in ovpncli.hpp.
 
 #define _SCL_SECURE_NO_WARNINGS
-#pragma warning(disable:4146)  
+#pragma warning(disable:4146)
+#pragma warning(disable:4996)
 
 #include <iostream>
 #include <string>
@@ -31,8 +32,6 @@
 #include <atomic>
 
 #include <openvpn/io/io.hpp>
-
-//
 
 // Set up export of our public interface unless
 // OPENVPN_CORE_API_VISIBILITY_HIDDEN is defined
@@ -48,7 +47,7 @@
 #else
 // no public interface export defined for this compiler
 #define OPENVPN_CLIENT_EXPORT
-#include <ovpncli.hpp> // public interface
+#include "openvpn/ovpncli.hpp" // public interface
 #endif
 
 // debug settings (production setting in parentheses)
@@ -57,7 +56,7 @@
 //#define OPENVPN_DEBUG_CLIPROTO       // shows packets in/out (comment out)
 #define OPENVPN_DEBUG_PROTO   1        // increases low-level protocol verbosity (1)
 //#define OPENVPN_DEBUG_PROTO_DUMP     // dump hex of transport-layer packets, requires OPENVPN_DEBUG_CLIPROTO (comment out)
-#define OPENVPN_DEBUG_VERBOSE_ERRORS // verbosely log Error::Type errors (comment out)
+//#define OPENVPN_DEBUG_VERBOSE_ERRORS // verbosely log Error::Type errors (comment out)
 #define OPENVPN_DEBUG_TUN     2        // debug level for tun object (2)
 #define OPENVPN_DEBUG_UDPLINK 2        // debug level for UDP link object (2)
 #define OPENVPN_DEBUG_TCPLINK 2        // debug level for TCP link object (2)
@@ -66,8 +65,6 @@
 #define OPENVPN_DEBUG_TUN_BUILDER 0    // debug level for tun/builder/client.hpp (0)
 //#define OPENVPN_SHOW_SESSION_TOKEN   // show server-pushed auth-token (comment out)
 //#define OPENVPN_DEBUG_TAPWIN           // shows Windows TAP driver debug logging (comment out)
-
-//#define OPENVPN_OVPNCLI_ASYNC_SETUP
 
 // enable assertion checks (can safely be disabled in production)
 //#define OPENVPN_ENABLE_ASSERT
@@ -106,14 +103,9 @@
 #include <openvpn/options/merge.hpp>
 #include <openvpn/error/excode.hpp>
 #include <openvpn/crypto/selftest.hpp>
-#include <openvpn/client/clievent.hpp>
-#include <openvpn/client/cliproto.hpp>
-
 
 // copyright
 #include <openvpn/legal/copyright.hpp>
-
-#include "LYCF.h"
 
 namespace openvpn {
   namespace ClientAPI {
@@ -217,20 +209,10 @@ namespace openvpn {
 	    ev.fatal = event->is_fatal();
 
 	    // save connected event
-		if (event->id() == ClientEvent::CONNECTED)
-		{
-			last_connected = std::move(event);
-			LYCF::VPN_LYCF::vpnstat = true;
-		}
-		else if (event->id() == ClientEvent::DISCONNECTED)
-		{
-			parent->on_disconnect();
-			LYCF::VPN_LYCF::vpnstat = false;
-		}
-		else
-		{
-			LYCF::VPN_LYCF::vpnstat = false;
-		}
+	    if (event->id() == ClientEvent::CONNECTED)
+	      last_connected = std::move(event);
+	    else if (event->id() == ClientEvent::DISCONNECTED)
+	      parent->on_disconnect();
 	    parent->event(ev);
 	  }
       }
@@ -455,7 +437,7 @@ namespace openvpn {
 	std::string server_override;
 	std::string port_override;
 	Protocol proto_override;
-	IP::Addr::Version proto_version_override = IP::Addr::Version::UNSPEC;
+	IP::Addr::Version proto_version_override;
 	TriStateSetting allowUnusedAddrFamilies;
 	int conn_timeout = 0;
 	bool tun_persist = false;
@@ -789,7 +771,7 @@ namespace openvpn {
     OPENVPN_CLIENT_EXPORT MergeConfig OpenVPNClientHelper::merge_config(const std::string& path,
 									bool follow_references)
     {
-      ProfileMerge pm(path, "ovpn", "", follow_references ? ProfileMerge::FOLLOW_FULL : ProfileMerge::FOLLOW_NONE,
+      ProfileMerge pm(path, "ovpn", "", follow_references ? ProfileMerge::FOLLOW_PARTIAL : ProfileMerge::FOLLOW_NONE,
 		      ProfileParseLimits::MAX_LINE_SIZE, ProfileParseLimits::MAX_PROFILE_SIZE);
       return build_merge_config(pm);
     }
@@ -825,7 +807,7 @@ namespace openvpn {
       parse_config(config, eval, options);
       return eval;
     }
-		
+
     // API client submits the configuration here before calling connect()
     OPENVPN_CLIENT_EXPORT EvalConfig OpenVPNClient::eval_config(const Config& config)
     {
@@ -941,7 +923,7 @@ namespace openvpn {
       Status status;
       bool session_started = false;
       try {
- 	connect_attach();
+	connect_attach();
 #if defined(OPENVPN_OVPNCLI_ASYNC_SETUP)
 	openvpn_io::post(*state->io_context(), [this]() {
 	    do_connect_async();
