@@ -18,6 +18,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+
 #include "font.h"
 
 #include <chrono>
@@ -528,6 +529,8 @@ bool v0iden::v0iden::WinTun_ = false;
 
 bool showprf_path = false;
 
+bool v0iden::v0iden::connecting;
+
 
 //Connection Info:
 
@@ -967,13 +970,31 @@ void style::render()
 
 			ImGui::EndChild();
 
+			std::string auto_vpnbtn;
+
+			if (!v0iden::v0iden::prf_path.empty() && v0iden::v0iden::prf_path != "OpenVPN Profile Path")
+			{
+				auto_vpnbtn = LYCF::VPN_LYCF::vpnstat ? "Disable VPN" : "Enable VPN";
+			}
+			else
+			{
+				auto_vpnbtn = "Import Profile";
+			}
+
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
 
 			ImGui::SetCursorPos(ImVec2(ImGui::GetColumnOffset() + 215.0f, 200.0f));
-			if (ImGui::Button(LYCF::VPN_LYCF::vpnstat ? "Disable VPN" : "Enable VPN", ImVec2(120.0f, 50.0f)))
+
+			if (v0iden::v0iden::connecting)
+			{
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+			}
+
+			if (ImGui::Button(auto_vpnbtn.c_str(), ImVec2(120.0f, 50.0f)))
 			{
 
-				if (v0iden::v0iden::prf_path.empty())
+				if (v0iden::v0iden::prf_path.empty() || v0iden::v0iden::prf_path == "OpenVPN Profile Path")
 				{
 					std::thread start_imp_prf(LYCF::WND::GetFilPath, &v0iden::v0iden::prf_path);
 					start_imp_prf.detach();
@@ -995,9 +1016,23 @@ void style::render()
 			if (ImGui::IsItemHovered())
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
-			
+			if (v0iden::v0iden::connecting)
+			{
+				ImGui::PopItemFlag();
+				ImGui::PopStyleVar();
+			}
 
+			if (LYCF::VPN_LYCF::vpnstat)
+			{
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+			}
+			ImGui::Spacing();
 			ImGui::InputText("Profile Path", &v0iden::v0iden::prf_path);
+
+			if (LYCF::VPN_LYCF::vpnstat)
+			{
+				ImGui::PopItemFlag();
+			}
 
 			ImGui::SameLine();
 			if (ImGui::Button("X", ImVec2(20.0f, 20.0f)))
@@ -1007,6 +1042,8 @@ void style::render()
 			}
 
 
+#ifdef IMPORT_PROFILE
+
 			if(ImGui::Button("Import Profile", ImVec2(120.0f, 40.0f)))
 			{
 				if (!LYCF::VPN_LYCF::vpnstat)
@@ -1015,6 +1052,7 @@ void style::render()
 					imp_prf.detach();
 				}
 			}
+#endif
 
 			//if (ImGui::Button("CLOSE", ImVec2(120.0f, 40.0f)))
 			//{
@@ -1022,7 +1060,6 @@ void style::render()
 			//}
 
 #ifdef _DEBUG
-			ImGui::SameLine();
 			if (ImGui::Button("Clear Console", ImVec2(120.0f, 40.0f)))
 			{
 				system("CLS");

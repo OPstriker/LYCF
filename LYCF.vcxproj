@@ -189,6 +189,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="include\imgui\imgui_stdlib.cpp" />
+    <ClCompile Include="src\lycf_base.cpp" />
     <ClCompile Include="src\font.cpp" />
     <ClCompile Include="include\imgui\imgui.cpp" />
     <ClCompile Include="include\imgui\imguipp.cpp" />
@@ -203,6 +204,7 @@
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\menu.cpp" />
     <ClCompile Include="src\ovpncli.cpp" />
+    <ClCompile Include="src\sqlite3.c" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\v0iden.cpp" />
   </ItemGroup>
@@ -210,6 +212,7 @@
     <ClInclude Include="include\boost\bind.hpp" />
     <ClInclude Include="include\boost\config.hpp" />
     <ClInclude Include="include\imgui\imgui_stdlib.h" />
+    <ClInclude Include="src\lycf_base.h" />
     <ClInclude Include="src\font.h" />
     <ClInclude Include="include\asio\any_io_executor.hpp" />
     <ClInclude Include="include\asio\associated_allocator.hpp" />
@@ -1538,6 +1541,9 @@
   <ItemGroup>
     <None Include="res\App.aps" />
     <None Include="vcpkg.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="lib\lib%27s are now managed by vcpkg.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

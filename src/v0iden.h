@@ -11,6 +11,7 @@ namespace v0iden
 	public:
 		static bool v_connect();
 		static bool v_disconnect();
+		static bool connecting;
 
 		static std::string prf_path;
 

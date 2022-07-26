@@ -9,6 +9,7 @@
 //#define WIN32_LEAN_AND_MEAN
 
 #include "LYCF.h"
+#include "lycf_base.h"
 #include <Uxtheme.h>
 #include <iostream>
 #include <imgui/imgui.h>
@@ -36,6 +37,7 @@
 #include <uxtheme.h>
 
 #include <dwmapi.h>
+#include <Shlwapi.h>
 
 //#include "resource.h"
 
@@ -65,6 +67,7 @@ bool SetSwapInterval(int interval); //0 - No Interval, 1 - Sync whit VSYNC, n - 
 bool WGLExtensionSupported(const char* extension_name);
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+std::string databse_path;
 
 
 // Aplication Entry
@@ -77,6 +80,32 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
 #endif
+
+    // Create LOCAL database
+
+    TCHAR szFileName[MAX_PATH];
+
+    if (GetModuleFileName(NULL, szFileName, MAX_PATH))
+    {
+        PathRemoveFileSpec(szFileName);
+
+        std::string fl_nm_dir = szFileName;
+
+        std::string dbase_path = fl_nm_dir + "\\byte.db";
+
+        databse_path = dbase_path;
+
+        if (GetFileAttributes(dbase_path.c_str()) == INVALID_FILE_ATTRIBUTES)
+        {
+            lycf_base::CreateDB(dbase_path.c_str());
+            lycf_base::CreateTable(dbase_path.c_str());
+            lycf_base::InsertData(dbase_path.c_str());
+        }
+        else {
+            lycf_base::FetchData(dbase_path.c_str());
+        }
+    }
+
 
     SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2); // DPI Scalling...
 
@@ -544,6 +573,7 @@ bool LYCF::WND::GetFilPath(std::string* path)
     if (GetOpenFileNameA(&ofn) == TRUE)
     {
         *path = ofn.lpstrFile;
+        lycf_base::UpdateData(databse_path.c_str());
         return true;
     }
     else {

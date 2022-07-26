@@ -14,6 +14,13 @@ private:
 
 		LYCF::VPN_LYCF::vpnstat = ev.name == "CONNECTED" ? true : false;
 
+		if (!LYCF::VPN_LYCF::vpnstat && ev.name != "DISCONNECTED")
+		{
+			v0iden::v0iden::connecting = true;
+		}
+		else {
+			v0iden::v0iden::connecting = false;
+		}
 		
 
 		v0iden::v0iden::Server_Pub_IP = connection_info().serverIp;
@@ -21,6 +28,11 @@ private:
 		v0iden::v0iden::Port = connection_info().serverPort;
 		v0iden::v0iden::VPN_Protocol = connection_info().serverProto;
 		v0iden::v0iden::Tun_intf = connection_info().tunName;
+
+#ifdef _DEBUG
+		//std::cout << ev.name + "\n";
+#endif // 
+
 		
 	}
 
@@ -29,12 +41,12 @@ private:
 #ifdef _DEBUG
 
 		std::cout << loginf.text;
+
 #endif
 
 	}
 
 	virtual void external_pki_cert_request(ClientAPI::ExternalPKICertRequest& certreq) override {
-
 	}
 
 	virtual void external_pki_sign_request(ClientAPI::ExternalPKISignRequest& signreq) override {
@@ -71,6 +83,7 @@ bool v0iden::v0iden::v_connect()
 		the_client = &client;
 
 		ClientAPI::EvalConfig eval = client.eval_config(config);
+
 
 		ClientAPI::Status connect_status = client.connect();
 

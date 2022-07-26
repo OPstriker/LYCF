@@ -66,6 +66,12 @@
     <ClCompile Include="src\ovpncli.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\sqlite3.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lycf_base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\wglext.h">
@@ -4040,6 +4046,9 @@
     <ClInclude Include="include\imgui\imgui_stdlib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\lycf_base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="res\App.rc">
@@ -4049,5 +4058,8 @@
   <ItemGroup>
     <None Include="res\App.aps" />
     <None Include="vcpkg.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="lib\lib%27s are now managed by vcpkg.txt" />
   </ItemGroup>
 </Project>
