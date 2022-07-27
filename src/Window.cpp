@@ -101,9 +101,7 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
             lycf_base::CreateTable(dbase_path.c_str());
             lycf_base::InsertData(dbase_path.c_str());
         }
-        else {
-            lycf_base::FetchData(dbase_path.c_str());
-        }
+        lycf_base::FetchData(dbase_path.c_str());
     }
 
 

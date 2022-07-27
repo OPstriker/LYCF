@@ -204,7 +204,6 @@
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\menu.cpp" />
     <ClCompile Include="src\ovpncli.cpp" />
-    <ClCompile Include="src\sqlite3.c" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\v0iden.cpp" />
   </ItemGroup>

@@ -10,6 +10,7 @@
     "tap-windows6",
     "boost-asio",
     "freetype",
-    "openvpn3"
+    "openvpn3",
+    "sqlite3"
   ]
 }
