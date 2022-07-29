@@ -70,10 +70,13 @@ bool v0iden::v0iden::v_connect()
 		ClientAPI::Config config;
 
 		MergeConfig mc;
+ 
 
 		//mc = OpenVPNClientHelper::merge_config("C:\\Users\\skill\\Desktop\\Experiments\\LYCF - DirectX\\LYCF\\Build\\x64\\Release\\profiles\\OPstriker.ovpn", true);
 
-		mc = OpenVPNClientHelper::merge_config(v0iden::prf_path, true);
+		OpenVPNClientHelper ovpn_helper;
+
+		mc = ovpn_helper.merge_config(v0iden::prf_path, true);
 
 		config.content = mc.profileContent;
 		config.wintun = v0iden::WinTun_;

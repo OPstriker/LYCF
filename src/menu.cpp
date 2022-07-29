@@ -426,9 +426,11 @@ void style::MainWindow()
 
 	style->WindowBorderSize = 0;
 
-	style->Colors[ImGuiCol_Separator] = ImColor(35, 42, 47); //41, 42, 47
-	style->Colors[ImGuiCol_SeparatorActive] = ImColor(35, 42, 47); //41, 42, 47
-	style->Colors[ImGuiCol_SeparatorHovered] = ImColor(35, 42, 47); //41, 42, 47
+	//ImColor(35, 42, 47);
+
+	style->Colors[ImGuiCol_Separator] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f); //41, 42, 47
+	style->Colors[ImGuiCol_SeparatorActive] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f); //41, 42, 47
+	style->Colors[ImGuiCol_SeparatorHovered] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f); //41, 42, 47
 	//style->Colors[ImGuiCol_ButtonHovered] = ImColor(35, 42, 47, 255);
 
 	style->Colors[ImGuiCol_ModalWindowDimBg] = ImColor(25, 33, 35, 155); // 
@@ -472,7 +474,7 @@ void LYCF::Display::caption()
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.14f, 0.16f, 0.18f, 1.0f));
 
 	// CLOSE BUTTON
-	ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 78, 0.0f));
+	ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 74, 0.0f));
 	ImGui::PushID("close-btn");
 	if (ImGui::ButtonEx(" ", ImVec2(60.0f, 40.0f)))
 	{
@@ -481,7 +483,7 @@ void LYCF::Display::caption()
 	ImGui::PopID();
 
 	// MIN BUTTON
-	ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 138.0f, 0.0f));
+	ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 134.0f, 0.0f));
 	ImGui::PushID("minz-btn");
 	if (ImGui::ButtonEx(" ", ImVec2(60.0f, 40.0f)))
 	{
@@ -551,19 +553,17 @@ void style::render()
 	//ImGui::Columns(2);
 	ImGui::SetCursorPosY(0.0f);
 	ImGui::BeginColumns("LYCF", 2, ImGuiColumnsFlags_NoResize);
-	//ImGui::SetCursorPosY(70.0f);
 
 
-
-	ImGui::SetColumnOffset(1, 250);
+	ImGui::SetColumnOffset(1, 240);
 	{
 		//Left Side
 		//ImGui::SetScrollHereY(1.0);
-		static ImVec4 Active			= ImVec4(0.14f, 0.16f, 0.18f, 1.0f);
+		static ImVec4 Active			= ImVec4(0.17f, 0.19f, 0.21f, 1.0f); // ImVec4(0.14f, 0.16f, 0.18f, 1.0f);
 		static ImVec4 InActive			= ImVec4(0.10f, 0.13f, 0.14f, 0.0f); //25, 33, 35, 255
 
-		static ImVec4 HoveredInActive	= ImVec4(0.14f, 0.16f, 0.18f, 1.0f);
-		static ImVec4 Hovered			= ImVec4(0.14f, 0.16f, 0.18f, 0.4f);
+		static ImVec4 HoveredInActive	= ImVec4(0.17f, 0.19f, 0.21f, 1.0f); // ImVec4(0.14f, 0.16f, 0.18f, 1.0f);
+		static ImVec4 Hovered			= ImVec4(0.17f, 0.19f, 0.21f, 0.4f);
 
 		static ImVec4 Text				= ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 		static ImVec4 TextInactive		= ImVec4(1.0f, 1.0f, 1.0f, 0.2f); // 0.33, 0.35, 0.36, 1.0
@@ -574,6 +574,7 @@ void style::render()
 
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 8); // Rounding
 		ImGui::SetCursorPosY(10.0f);
+		
 
 		static auto ENABLE = 1; // Enable...
 
@@ -581,15 +582,10 @@ void style::render()
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, settings::tab == ENABLE ? HoveredInActive : Hovered);
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, settings::tab == ENABLE ? Active : Hovered);
 		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == ENABLE ? Text : TextInactive);
-		if (ImGui::Button("Enable", ImVec2(250 - 16.3f, 60)))
+		ImGui::SetCursorPosX(10.0f);
+		if (ImGui::Button("Enable", ImVec2(250 - 23.0f, 60)))
 			settings::tab = 1;
-		//if (ImGui::IsItemHovered()) {
-		//	ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
-		//	if (settings::tab == 1)
-		//		ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
-		//}
 
-		//ImGui::PopStyleColor(3);
 
 		static auto IBOSS = 2; // iBoss...
 
@@ -598,18 +594,13 @@ void style::render()
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, settings::tab == IBOSS ? HoveredInActive : Hovered);
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, settings::tab == IBOSS ? Active : Hovered);
 		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == IBOSS ? Text : TextInactive);
-		if (ImGui::Button("iBoss", ImVec2(250 - 16.3, 60)))
+		ImGui::SetCursorPosX(10.0f);
+		if (ImGui::Button("iBoss", ImVec2(250 - 23.0f, 60)))
 		{
 			settings::tab = 2;
 			LYCF::iBoss_LYCF::iboss_status(); // iBoss Status Updater...
 			LYCF::iBoss_LYCF::DoesiBossExist();
 		}
-		//if (ImGui::IsItemHovered()) {
-		//	ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
-		//	if (settings::tab == 2)
-		//		ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
-		//}
-		//ImGui::PopStyleColor(3);
 
 		static auto VPN = 3; // VPN...
 
@@ -618,14 +609,9 @@ void style::render()
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, settings::tab == VPN ? HoveredInActive : Hovered);
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, settings::tab == VPN ? Active : Hovered);
 		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == VPN ? Text : TextInactive);
-		if (ImGui::Button("VPN", ImVec2(250 - 16.3, 60)))
+		ImGui::SetCursorPosX(10.0f);
+		if (ImGui::Button("VPN", ImVec2(250 - 23.0f, 60)))
 			settings::tab = 3;
-		//if (ImGui::IsItemHovered()) {
-		//	ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
-		//	if (settings::tab == 3)
-		//		ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
-		//}
-		//ImGui::PopStyleColor(3);
 
 		static auto PREF = 4; // About...
 
@@ -634,15 +620,9 @@ void style::render()
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, settings::tab == PREF ? HoveredInActive : Hovered);
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, settings::tab == PREF ? Active : Hovered);
 		ImGui::PushStyleColor(ImGuiCol_Text, settings::tab == PREF ? Text : TextInactive);
-		if (ImGui::Button("Settings", ImVec2(250 - 16.3, 60)))
+		ImGui::SetCursorPosX(10.0f);
+		if (ImGui::Button("Settings", ImVec2(250 - 23.0f, 60)))
 			settings::tab = 4;
-		//if (ImGui::IsItemHovered()) {
-		//	//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, )
-		//	ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
-		//	if (settings::tab == 4)
-		//		ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
-		//}
-		//ImGui::PopStyleColor(3);
 
 		// ICONS
 
@@ -696,7 +676,7 @@ void style::render()
 			ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 6);
 			ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 1.1f);
 			ImGui::PushStyleColor(ImGuiCol_Border, LYCF::EN_LYCF::check_settings ? ImVec4(0.31f, 0.78f, 0.47f, 0.5f) : ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
-			ImGui::SetCursorPosY(50.0f);
+			ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() + 9, 50.0f));
 
 
 			// Settings Option
@@ -725,6 +705,7 @@ void style::render()
 			ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 1.1f);
 
 			ImGui::Spacing();
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 9);
 			ImGui::BeginChild("CMD", ImVec2(ImGui::GetWindowWidth() - 285, 60), true);
 			ImGui::SetCursorPos(ImVec2(20, 22));
 			ImGui::Text("CMD");
@@ -756,6 +737,7 @@ void style::render()
 			ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 1.1f);
 
 			ImGui::Spacing();
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 9);
 			ImGui::BeginChild("TaskManager", ImVec2(ImGui::GetWindowWidth() - 285, 60), true);
 			ImGui::SetCursorPos(ImVec2(20, 22));
 			ImGui::Text("TaskManager");
@@ -813,7 +795,7 @@ void style::render()
 
 			// iBoss Options...
 			ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
-			ImGui::SetCursorPosY(90.0f);
+			ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() + 9, 90.0f));
 			ImGui::BeginChild("iBoss-Auto", ImVec2(ImGui::GetWindowWidth() - 285, 60), true); // iBoss-Block start...
 			ImGui::SetCursorPos(ImVec2(10.0f, 22.0f));
 			ImGui::Text("iBoss");
@@ -868,6 +850,7 @@ void style::render()
 			// iBoss Login
 
 			ImGui::Spacing();
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 9);
 			ImGui::BeginChild("iBoss Login", ImVec2(ImGui::GetWindowWidth() - 285.0f, 60.0f), false);
 			ImGui::SetCursorPos(ImVec2(10.0f, 22.0f));
 			ImGui::Text("iBoss Login (BYOD)");
@@ -902,6 +885,7 @@ void style::render()
 			// iBoss Persist
 			ImGui::Spacing();
 			ImGui::PushStyleColor(ImGuiCol_Border, LYCF::iBoss_LYCF::iboss_persis ? ImVec4(0.31f, 0.78f, 0.47f, 0.5f) : ImVec4(1.0f, 1.0f, 1.0f, 0.1f));
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 9);
 			ImGui::BeginChild("iBoss-Persist)", ImVec2(ImGui::GetWindowWidth() - 285.0f, 60.0f), true); // iBoss - Persis Begin...
 			ImGui::SetCursorPos(ImVec2(10.0f, 22.0f));
 			ImGui::Text("Persistent Block (optional)");
@@ -1143,17 +1127,20 @@ void style::render()
 			}
 			ImGui::PopStyleVar();
 
+			ImGui::Text("Made with \xe2\x9d\xa4");
+
 		}
 
 		// Caption....
 		//settings::tab = 4;
 
 		ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.10f, 0.13f, 0.14f, 0.0f));
+		//ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.40f, 0.73f, 0.34f, 1.0f));
 		//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.10f, 0.13f, 0.14f, 0.0f));
 
-		ImGui::SetCursorPos(ImVec2(212.0f, 0.0f));
+		ImGui::SetCursorPos(ImVec2(244.0f, 0.0f));
 
-		ImGui::BeginChild("Caption", ImVec2(500.0f, 40.0f), false);
+		ImGui::BeginChild("Caption", ImVec2(472.0f, 40.0f), false);
 
 		ImGui::EndChild();
 

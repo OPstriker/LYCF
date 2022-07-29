@@ -38,6 +38,7 @@
 
 #include <dwmapi.h>
 #include <Shlwapi.h>
+#include <shlobj_core.h>
 
 //#include "resource.h"
 
@@ -83,25 +84,32 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
 
     // Create LOCAL database
 
-    TCHAR szFileName[MAX_PATH];
+    wchar_t* szFileName;
 
-    if (GetModuleFileName(NULL, szFileName, MAX_PATH))
+    if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, NULL, &szFileName)))
     {
-        PathRemoveFileSpec(szFileName);
+        std::wstring appdata_fl = szFileName;
 
-        std::string fl_nm_dir = szFileName;
+        std::wstring dbase_dir = appdata_fl + L"\\LYCF";
+        std::wstring dbase_path = appdata_fl + L"\\LYCF\\byte.db";
 
-        std::string dbase_path = fl_nm_dir + "\\byte.db";
+        std::string convert(dbase_path.begin(), dbase_path.end());
 
-        databse_path = dbase_path;
+        databse_path = convert;
 
-        if (GetFileAttributes(dbase_path.c_str()) == INVALID_FILE_ATTRIBUTES)
+        if (GetFileAttributesW(dbase_dir.c_str()) != FILE_ATTRIBUTE_DIRECTORY)
         {
-            lycf_base::CreateDB(dbase_path.c_str());
-            lycf_base::CreateTable(dbase_path.c_str());
-            lycf_base::InsertData(dbase_path.c_str());
+            CreateDirectoryW(dbase_dir.c_str(), NULL);
         }
-        lycf_base::FetchData(dbase_path.c_str());
+
+        if (GetFileAttributes(convert.c_str()) == INVALID_FILE_ATTRIBUTES)
+        {
+            lycf_base::CreateDB(convert.c_str());
+            lycf_base::CreateTable(convert.c_str());
+            lycf_base::InsertData(convert.c_str());
+        }
+        lycf_base::FetchData(convert.c_str());
+       
     }
 
 
@@ -109,7 +117,7 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
 
     LPCSTR CLASS_NAME = "LYCF";
 
-    HBRUSH hBrBackground = CreateSolidBrush(RGB(25, 33, 36)); // Custom Window Background Color...
+    HBRUSH hBrBackground = CreateSolidBrush(RGB(31, 36, 41)); // Custom Window Background Color...
 
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
@@ -188,7 +196,8 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
     //Set Window bg color
     //ImVec4 clear_color = ImVec4(1.000F, 1.000F, 1.000F, 1.0F);
 
-    ImVec4 clear_color = ImVec4(0.10f, 0.13f, 0.14f, 1.0f);
+    //ImVec4 clear_color = ImVec4(0.10f, 0.13f, 0.14f, 1.0f);
+    ImVec4 clear_color = ImVec4(0.12f, 0.14f, 0.16f, 1.0f);
 
     // Setup style
     ImGui::StyleColorsClassic();
@@ -236,7 +245,14 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
 
 
               ImGui::SetWindowSize(ImVec2(850.0f, 550.0f), 0); // 850, 550
-              ImGui::SetWindowPos(ImVec2(0.0f, 0.0f));
+              ImGui::SetWindowPos(ImVec2(-4.0f, 0.0f));
+
+              ImDrawList* drawl = ImGui::GetWindowDrawList();
+              //ImGui::SetCursorPosY(70.0f);
+
+
+              ImU32 colbkg = ImGui::GetColorU32(ImVec4(0.14f, 0.16f, 0.18f, 1.0f));
+              drawl->AddRectFilled(ImVec2(0.0f, 0.0f), ImVec2(240.0f, 550.0f), colbkg);
 
               //ImGui::ShowDemoWindow(0);
               style::render();
