@@ -1019,7 +1019,7 @@ void style::render()
 			}
 
 			ImGui::SameLine();
-			if (ImGui::Button("X", ImVec2(20.0f, 20.0f)))
+			if (ImGui::Button("\xe2\x9c\x95", ImVec2(30.0f, 30.0f)))
 			{
 				if (!LYCF::VPN_LYCF::vpnstat)
 					v0iden::v0iden::prf_path = "";
@@ -1066,20 +1066,37 @@ void style::render()
 
 				ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 20.0f);
 
-				std::string pub_name("Server : " + v0iden::v0iden::Server_Name);
+				std::string pub_name(
+					" SERVER        \n\xe2\x86\xb3 " + v0iden::v0iden::Server_Name
+				);
 				ImGui::Text(pub_name.c_str());
 
+				ImGui::SameLine();
 
-				std::string pub_ip("Public IP : " + v0iden::v0iden::Server_Pub_IP);
+				std::string pub_ip(
+					" PUBLIC IP    \n\xe2\x86\xb3 " + v0iden::v0iden::Server_Pub_IP
+				);
 				ImGui::Text(pub_ip.c_str());
 
-				std::string port("Port : " + v0iden::v0iden::Port);
+				ImGui::SameLine();
+
+				std::string port(
+					" PORT		   \n\xe2\x86\xb3 " + v0iden::v0iden::Port
+				);
 				ImGui::Text(port.c_str());
 
-				std::string vpn_prot("VPN Protocol : " + v0iden::v0iden::VPN_Protocol);
+				ImGui::Spacing();
+
+				std::string vpn_prot(
+					" PROTOCOL	 \n\xe2\x86\xb3 " + v0iden::v0iden::VPN_Protocol
+				);
 				ImGui::Text(vpn_prot.c_str());
 
-				std::string tun_intf("Tun Driver : " + v0iden::v0iden::Tun_intf);
+				ImGui::Spacing();
+
+				std::string tun_intf(
+					" DRIVER  \n\xe2\x86\xb3 " + v0iden::v0iden::Tun_intf
+				);
 				ImGui::Text(tun_intf.c_str());
 
 			}
