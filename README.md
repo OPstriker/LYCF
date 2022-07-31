@@ -20,4 +20,4 @@ A Pretty Crappy and Modern Security App I Made to Aid MS-Windows Back in School 
 
 ### Whats Needed to Build?
 - [Visual Studio Community 2022](https://visualstudio.microsoft.com/vs/community/)
-- vcpkg
+- [vcpkg](vcpkg.io)
