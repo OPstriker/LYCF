@@ -12,3 +12,8 @@ A Pretty Crappy and Modern Security App I Made to Aid MS-Windows Back in School 
 - [X] Regedit Based Unlocker/Locker
 - [ ] Buit-in Hotspot with VPN Share Support.
 - [ ] WireGuard Implemenation along with OpenVPN (Double Route).
+
+### Supported Platforms
+- [X] Windows (x64)
+- [ ] MacOS
+- [ ] Linux
