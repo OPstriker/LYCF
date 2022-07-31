@@ -13,7 +13,12 @@ A Pretty Crappy and Modern Security App I Made to Aid MS-Windows Back in School 
 - [ ] Buit-in Hotspot with VPN Share Support.
 - [ ] WireGuard Implemenation along with OpenVPN (Double Route).
 
-### Supported Platforms
+### Supported Platforms?
 - [X] Windows (x64)
 - [ ] MacOS
 - [ ] Linux
+
+### Whats Needed to Build?
+- Visual Studio Community 2022
+- vcpkg
+- git
