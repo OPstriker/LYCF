@@ -8,14 +8,10 @@ A Pretty Crappy and Modern Security App I Made to Aid MS-Windows Back in School 
 
 ### Uses?
 
-- VPN (OpenVPN)
-- Regedit Based Unlocker/Locker
-(Thats All for Now...)
-
-### Plans:
-
-- Buit-in Hotspot with VPN Share Support.
-- Better UI designs.
-- WireGuard Implemenation along with OpenVPN (Double Route).
-- A better update Framework other than NSIS (Inno Setup Installer).
-- Hopefully Get all of this to work out...
+- [X] VPN (OpenVPN)
+- [X] Regedit Based Unlocker/Locker
+- [ ] Buit-in Hotspot with VPN Share Support.
+- [ ] Better UI designs.
+- [ ] WireGuard Implemenation along with OpenVPN (Double Route).
+- [ ] A better update Framework other than NSIS (Inno Setup Installer).
+- [ ] Hopefully Get all of this to work out...
