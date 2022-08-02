@@ -511,6 +511,8 @@ void LYCF::Display::caption()
 bool LYCF::EN_LYCF::check_settings;
 bool LYCF::EN_LYCF::check_cmd;
 bool LYCF::EN_LYCF::check_TManager;
+bool LYCF::EN_LYCF::Uninstall = true;
+bool LYCF::EN_LYCF::Show_Uninstall;
 
 
 // iBoss Bool...
@@ -833,13 +835,16 @@ void style::render()
 			{
 				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
+#ifdef SHOW_TOOLTIP
 				ImGui::PushFont(style::bahnschrift_16px);
 				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.25, 0.26, 0.27, 1.0f));
 				ImGui::SetTooltip(LYCF::iBoss_LYCF::ibs_stat ? "Click to Block iBoss" : "Click to Enable iBoss");
 				ImGui::PopStyleColor();
 				ImGui::PopFont();
 
+#endif // SHOW_TOOLTIP
 			}
+
 
 			ImGui::PopStyleVar(2);
 			ImGui::PopStyleColor(4);
@@ -1107,45 +1112,49 @@ void style::render()
 
 		if (settings::tab == 4) // Settings
 		{
+			// Check whether Uninstall Files Exist...
 
-			ImGui::PushFont(style::emoji_32px);
-			ImGui::Text("\xe2\x9d\xa4 \xE2\x9C\x85 \xE2\x9D\x8C \xF0\x9F\x9A\x80");
-			ImGui::PopFont();
+			TCHAR szFileName[MAX_PATH];
+			std::string u_path;
 
-			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6.0f);
-
-			if (ImGui::Button("Un-Install", ImVec2(157.0f, 72.0f)))
+			if (LYCF::EN_LYCF::Uninstall)
 			{
-				TCHAR szFileName[MAX_PATH];
-
 				if (GetModuleFileName(NULL, szFileName, MAX_PATH))
 				{
-					PathRemoveFileSpec(szFileName);
-
-					std::string fl_nm_dir = szFileName;
-
-					std::string uninstall_path = fl_nm_dir + "\\unins000.exe";
-
-					DWORD file_atr = GetFileAttributes(uninstall_path.c_str());
-
-					if (file_atr != INVALID_FILE_ATTRIBUTES)
+					if (PathRemoveFileSpec(szFileName))
 					{
-						LYCF::WND::cmdl_quit();
-						LYCF::WND::start_exec(uninstall_path.c_str());
-						std::cout << uninstall_path + "\n";
+						std::string fl_nm_dir = szFileName;
+
+						std::string uninstall_path = fl_nm_dir + "\\unins000.exe";
+
+						u_path = uninstall_path;
+
+						if (GetFileAttributes(uninstall_path.c_str()) != INVALID_FILE_ATTRIBUTES)
+						{
+							LYCF::EN_LYCF::Show_Uninstall = true;
+						}
+						else
+						{
+							LYCF::EN_LYCF::Show_Uninstall = false;
+						}
 					}
-					else
-					{
-						std::cout << "Could Not Find Uninstall File...\n";
-					}
+				}
+				LYCF::EN_LYCF::Uninstall = false;
+			}
+			
+			if (LYCF::EN_LYCF::Show_Uninstall)
+			{
+				ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6.0f);
+
+				if (ImGui::Button("Un-Install", ImVec2(157.0f, 72.0f)))
+				{
+
+					LYCF::WND::cmdl_quit();
+					LYCF::WND::start_exec(u_path.c_str());
 
 				}
-				
+				ImGui::PopStyleVar();
 			}
-			ImGui::PopStyleVar();
-
-			ImGui::Text("Made with \xe2\x9d\xa4");
-
 		}
 
 		// Caption....

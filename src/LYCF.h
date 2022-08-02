@@ -62,6 +62,8 @@ namespace LYCF {
 		static bool check_TManager;
 		static bool captionmove;
 		static bool enable;
+		static bool Uninstall;
+		static bool Show_Uninstall;
 	};
 
 	class iBoss_LYCF
