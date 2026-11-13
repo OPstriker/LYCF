@@ -1,23 +1,22 @@
 # LYCF
+### Overview
 
-<b>Let Your Computer Free!</b>
+LYCF is a lightweight and modern security utility developed to assist with administrative management on MS Windows. While primarily built as a practical exploration of systems programming and security implementation, it serves as a functional toolkit for local environment management.
 
-### Whats this?
+### Features & Roadmap
 
-A Pretty Crappy and Modern Security App I Made to Aid MS-Windows Back in School days... I must say that you won't find much use out of this Project. Unless you want to learn about the Implementation etc...
+- [X] OpenVPN Integration
+- [X] Registry-Based Locker and Unlocker
+- [ ] Built-in Hotspot with VPN Sharing Support
+- [ ] Dual-Routing Implementation (OpenVPN and WireGuard)
 
-### Uses/Plans?
+### Supported Platforms
 
-- [X] VPN (OpenVPN)
-- [X] Regedit Based Unlocker/Locker
-- [ ] Buit-in Hotspot with VPN Share Support.
-- [ ] WireGuard Implemenation along with OpenVPN (Double Route).
-
-### Supported Platforms?
 - [X] Windows (x64)
-- [ ] MacOS
+- [ ] macOS
 - [ ] Linux
 
-### Whats Needed to Build?
+### Prerequisites & Building
+
 - [Visual Studio Community 2022](https://visualstudio.microsoft.com/vs/community/)
 - [vcpkg](https://vcpkg.io)
